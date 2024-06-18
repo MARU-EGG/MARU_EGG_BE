@@ -1,4 +1,4 @@
-name: MARU EGG CI
+name: MARU EGG CI-CD
 
 on:
   push:
@@ -11,13 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # build
+      # Setup Java JDK
       - name: Setup Java JDK
         uses: actions/setup-java@v1
         with:
           java-version: 17
 
-      # gradle caching - 빌드 시간 향상
+      # Gradle caching
       - name: Gradle Caching
         uses: actions/cache@v3
         with:
@@ -28,60 +28,53 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # 환경별 yml 파일 생성(1) - application.yml
+      # 환경별 yml 파일 생성
       - name: make application.yml
-        if: |
-          contains(github.ref, 'main') ||
-          contains(github.ref, 'develop')
+        if: contains(github.ref, 'main') || contains(github.ref, 'develop')
         run: |
-          mkdir -p ./src/main/resources # resources 폴더 생성, 존재하면 생략
-          cd ./src/main/resources # resources 폴더로 이동
-          touch ./application.yml # application.yml 생성
-          echo "${{ secrets.YML }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.YML }}" > ./src/main/resources/application.yml
         shell: bash
 
-      # 환경별 yml 파일 생성(2) - dev
       - name: make application-dev.yml
         if: contains(github.ref, 'develop')
         run: |
-          mkdir -p ./src/main/resources # ensure resources 폴더 exists
-          cd ./src/main/resources
-          touch ./application-dev.yml
-          echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.YML_DEV }}" > ./src/main/resources/application-dev.yml
         shell: bash
 
-      #      TODO: 환경별 yml 파일 생성(3) - prod
-      #      - name: make application-prod.yml
-      #        if: contains(github.ref, 'main')
-      #        run: |
-      #          cd ./src/main/resources
-      #          touch ./application-prod.yml
-      #          echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
-      #        shell: bash
-
+      # Grant execute permission for gradlew
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Build with Gradle
       - name: Build with Gradle
         run: ./gradlew build
 
-      # docker push
+      # Check if the JAR file is generated
+      - name: Check JAR file exists
+        run: test -f build/libs/demo-0.0.1-SNAPSHOT.jar
+
+      # Get current date
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
+      # Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # Metadata action
       - name: Metadata action
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: ${{ secrets.DOCKER_REPO }}
 
+      # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -90,6 +83,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}-${{ steps.date.outputs.date }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      # Deploy
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
