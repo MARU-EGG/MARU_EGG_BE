@@ -1,0 +1,40 @@
+name: MARU EGG CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Setup Java JDK
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      # gradlew의 권한을 변경
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Gradle caching
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+      # Build with Gradle
+      - name: Build with Gradle
+        run: |
+          ./gradlew assemble
+
+      # Check if the JAR file exists
+      - name: Check JAR file exists
+        run: ls -al build/libs
