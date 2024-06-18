@@ -68,5 +68,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PEM_KEY }}
           script: |
-            touch hello.txt
-            echo "hello world" > hello.txt
+            docker pull $-$
+            docker stop maru_egg
+            docker rm maru_egg
+            docker run --restart always -d -p 80:8080 --name maru_egg $-$
