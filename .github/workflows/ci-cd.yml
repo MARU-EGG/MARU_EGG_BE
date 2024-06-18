@@ -1,4 +1,4 @@
-name: MARU EGG CI-CD
+name: MARU EGG CI
 
 on:
   push:
@@ -35,6 +35,11 @@ jobs:
       # Check if the JAR file exists
       - name: Check JAR file exists
         run: ls -al build/libs
+
+      # Get current date
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
       # Log in to Docker Hub
       - name: Log in to Docker Hub
