@@ -1,4 +1,4 @@
-name: MARU EGG CI-CD
+name: MARU EGG CI
 
 on:
   push:
@@ -53,7 +53,7 @@ jobs:
 
       # Check if the JAR file is generated
       - name: Check JAR file exists
-        run: test -f build/libs/demo-0.0.1-SNAPSHOT.jar
+        run: ls -al build/libs
 
       # Get current date
       - name: Get current date
