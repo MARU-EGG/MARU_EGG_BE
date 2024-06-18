@@ -28,37 +28,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # 환경별 yml 파일 생성
-      - name: make application.yml
-        if: contains(github.ref, 'main') || contains(github.ref, 'develop')
-        run: |
-          mkdir -p ./src/main/resources
-          echo "${{ secrets.YML }}" > ./src/main/resources/application.yml
-        shell: bash
-
-      - name: make application-dev.yml
-        if: contains(github.ref, 'develop')
-        run: |
-          mkdir -p ./src/main/resources
-          echo "${{ secrets.YML_DEV }}" > ./src/main/resources/application-dev.yml
-        shell: bash
-
-      # Grant execute permission for gradlew
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
       # Build with Gradle
       - name: Build with Gradle
         run: ./gradlew build
 
-      # Check if the JAR file is generated
+      # Check if the JAR file exists
       - name: Check JAR file exists
-        run: test -f build/libs/demo-0.0.1-SNAPSHOT.jar
-
-      # Get current date
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: ls -al build/libs
 
       # Log in to Docker Hub
       - name: Log in to Docker Hub
@@ -80,7 +56,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}-${{ steps.date.outputs.date }}
+          tags: ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
 
       # Deploy
