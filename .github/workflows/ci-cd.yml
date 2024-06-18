@@ -76,20 +76,26 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Metadata action
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ secrets.DOCKER_REPO }}
+
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: ${ steps.meta.outputs.tags }-${ steps.date.outputs.date }
-          labels: ${ steps.meta.outputs.labels }
+          tags: ${{ steps.meta.outputs.tags }}-${{ steps.date.outputs.date }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${ secrets.PUBLIC_DNS }
+          host: ${{ secrets.PUBLIC_DNS }}
           username: ubuntu
-          key: ${ secrets.PEM_KEY }
+          key: ${{ secrets.PEM_KEY }}
           script: |
             touch hello.txt
             echo "hello world" > hello.txt
