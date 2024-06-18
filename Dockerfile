@@ -10,4 +10,3 @@ ADD ${JAR_FILE} demo.jar
 
 # Run the jar file
 ENTRYPOINT ["java", "-jar", "/demo.jar"]
-
