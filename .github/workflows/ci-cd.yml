@@ -37,8 +37,6 @@ jobs:
       # Check if the JAR file exists
       - name: Check JAR file exists
         run: ls -al build/libs
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
       # Log in to Docker Hub
       - name: Log in to Docker Hub
@@ -77,6 +75,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PEM_KEY }}
           script: |
+            ssh-keyscan -H ${{ secrets.PUBLIC_DNS }} >> ~/.ssh/known_hosts
             docker pull ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
             docker stop maru_egg || true
             docker rm maru_egg || true
