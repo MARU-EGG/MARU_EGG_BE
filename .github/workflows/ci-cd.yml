@@ -1,7 +1,7 @@
 name: MARU EGG CI-CD Workflow
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
