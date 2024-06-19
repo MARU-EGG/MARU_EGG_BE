@@ -31,10 +31,6 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
-      # Build Docker image
-      - name: Build docker image
-        run: docker build -t ${{ secrets.DOCKER_REPO }} .
-
       # Build with Gradle
       - name: Build with Gradle
         run: ./gradlew build
@@ -43,30 +39,35 @@ jobs:
       - name: Check JAR file exists
         run: ls -al build/libs
 
-      # Log in to Docker Hub
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      #      # Metadata action
-      #      - name: Metadata action
-      #        id: meta
-      #        uses: docker/metadata-action@v4
-      #        with:
-      #          images: ${{ secrets.DOCKER_REPO }}
-
-      # Push Docker image
-      - name: docker Hub push
-        run: docker push ${{ secrets.DOCKER_REPO }}
-  
   CD:
     runs-on: ubuntu-latest
 
     needs: CI
 
     steps:
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Metadata action
+      - name: Metadata action
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ secrets.DOCKER_REPO }}
+
+      # Build and push Docker image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
+          labels: ${{ steps.meta.outputs.labels }}
+
       # Deploy to EC2 using SSH
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
