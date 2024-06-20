@@ -1,16 +1,9 @@
 spring:
-  config:
-    activate:
-      on-profile: dev
-
   datasource:
+    url: jdbc:mysql://localhost:3306
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  sql:
-    init:
-      schema-locations: classpath:schema.sql
+    username: root
+    password: Gh852852!
 
   jpa:
     hibernate:
@@ -18,6 +11,6 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        default_schema: ${DB_SCHEMA}
+        default_schema: maru-egg
         format_sql: true
     defer-datasource-initialization: false
