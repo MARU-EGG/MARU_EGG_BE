@@ -43,33 +43,61 @@ jobs:
       - name: Check JAR file exists
         run: ls -al build/libs
 
-#  CD:
-#    runs-on: ubuntu-latest
-#
-#    needs: CI
-#
-#    steps:
-#      # docker build & push to develop
-#      - name: Docker build & push to dev
-#        if: contains(github.ref, 'develop')
-#        run: |
-#          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#          docker build -t maru-egg-dev .
-#          docker tag maru-egg-dev ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
-#          docker push ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
-#
-#      ## deploy to develop
-#      - name: Deploy to dev
-#        uses: appleboy/ssh-action@master
-#        id: deploy-dev
-#        if: contains(github.ref, 'develop')
-#        with:
-#          host: ${{ secrets.PUBLIC_DNS }} # EC2 퍼블릭 IPv4 DNS
-#          username: ${{ secrets.USERNAME }}
-#          key: ${{ secrets.PEM_KEY }}
-#          script: |
-#            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
-#            sudo docker stop $(docker ps -a -q)
-#            sudo docker run -d --log-driver=syslog -p 8080:8080 -e ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
-#            sudo docker rm $(docker ps --filter 'status=exited' -a -q)
-#            sudo docker image prune -f
+      # Upload JAR file as artifact
+      - name: Upload JAR file
+        uses: actions/upload-artifact@v3
+        with:
+          name: maru-egg-be-jar
+          path: build/libs/*.jar
+
+  CD:
+    runs-on: ubuntu-latest
+
+    needs: CI
+
+    steps:
+      # Download JAR file from artifact
+      - name: Download JAR file
+        uses: actions/download-artifact@v3
+        with:
+          name: maru-egg-be-jar
+          path: build/libs
+
+      #      # Log in to Docker Hub
+      #      - name: Log in to Docker Hub
+      #        uses: docker/login-action@v1
+      #        with:
+      #          username: ${{ secrets.DOCKER_USERNAME }}
+      #          password: ${{ secrets.DOCKER_PASSWORD }}
+      #
+      #      # Metadata action
+      #      - name: Metadata action
+      #        id: meta
+      #        uses: docker/metadata-action@v4
+      #        with:
+      #          images: ${{ secrets.DOCKER_REPO }}
+
+      # docker build & push to develop
+      - name: Docker build & push to dev
+        if: contains(github.ref, 'develop')
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t maru-egg-dev .
+          docker tag maru-egg-dev ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
+          docker push ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
+
+      ## deploy to develop
+      - name: Deploy to dev
+        uses: appleboy/ssh-action@master
+        id: deploy-dev
+        if: contains(github.ref, 'develop')
+        with:
+          host: ${{ secrets.PUBLIC_DNS }} # EC2 퍼블릭 IPv4 DNS
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PEM_KEY }}
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
+            sudo docker stop $(docker ps -a -q)
+            sudo docker run -d --log-driver=syslog -p 8080:8080 -e ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
+            sudo docker rm $(docker ps --filter 'status=exited' -a -q)
+            sudo docker image prune -f
