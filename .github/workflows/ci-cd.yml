@@ -111,3 +111,5 @@ jobs:
             sudo docker run -d --log-driver=syslog -p 8080:8080 -e ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
             sudo docker rm $(docker ps --filter 'status=exited' -a -q)
             sudo docker image prune -f
+            cd /home/ubuntu/app
+            ./deploy.sh
