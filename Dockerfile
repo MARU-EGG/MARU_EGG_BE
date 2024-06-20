@@ -6,7 +6,7 @@ EXPOSE 8080
 ARG JAR_FILE=build/libs/*.jar
 
 # Add the application's jar to the container
-COPY ${JAR_FILE} MARU_EGG.jar
+COPY ${JAR_FILE} MARU_EGG_BE.jar
 
 # Run the jar file
-ENTRYPOINT ["java", "-jar", "MARU_EGG.jar"]
+ENTRYPOINT ["java", "-jar", "MARU_EGG_BE.jar"]
