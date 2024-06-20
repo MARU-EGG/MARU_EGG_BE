@@ -88,14 +88,15 @@ jobs:
         with:
           images: ${{ secrets.DOCKER_REPO }}
 
-      # docker build & push to develop
-      - name: Docker build & push to dev
+      # Build and push Docker image
+      - name: Build and push Docker image
         if: contains(github.ref, 'develop')
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t maru-egg-dev .
-          docker tag maru-egg-dev ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
-          docker push ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       ## deploy to develop
       - name: Deploy to dev
