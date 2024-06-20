@@ -67,6 +67,9 @@ jobs:
     needs: CI
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       # Download JAR file from artifact
       - name: Download JAR file
         uses: actions/download-artifact@v3
@@ -99,17 +102,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       ## deploy to develop
-      - name: Deploy to dev
+      - name: Deploy to EC2 dev
         uses: appleboy/ssh-action@master
-        id: deploy-dev
         if: contains(github.ref, 'develop')
         with:
-          host: ${{ secrets.PUBLIC_DNS }} # EC2 퍼블릭 IPv4 DNS
+          host: ${{ secrets.PUBLIC_DNS }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PEM_KEY }}
           script: |
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
-            sudo docker stop $(docker ps -a -q)
-            sudo docker run -d --log-driver=syslog -p 8080:8080 -e ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
-            sudo docker rm $(docker ps --filter 'status=exited' -a -q)
-            sudo docker image prune -f
+            docker pull ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
+            docker stop maru_egg
+            docker rm maru_egg
+            docker run --restart always -d -p 80:8080 --name maru_egg ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
