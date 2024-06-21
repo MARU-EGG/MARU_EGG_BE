@@ -134,7 +134,6 @@ jobs:
               app:
                 restart: on-failure
                 image: $IMAGE_TAG
-                build: .
                 container_name: maru-egg-app
                 ports:
                   - '8080:8080'
@@ -144,11 +143,12 @@ jobs:
                   SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/maru_egg
                   SPRING_DATASOURCE_USERNAME: root
                   SPRING_DATASOURCE_PASSWORD: $MYSQL_ROOT_PASSWORD
-            
-              volumes:
-                maru-egg-db:
+
+            volumes:
+              maru-egg-db:
             " > docker-compose.yml
 
             sudo docker-compose down --remove-orphans
             sudo docker-compose up -d
+            sudo docker ps --filter 'status=exited' -a -q | xargs --no-run-if-empty sudo docker rm
             sudo docker image prune -f
