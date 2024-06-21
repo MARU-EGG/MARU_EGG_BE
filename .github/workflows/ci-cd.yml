@@ -149,5 +149,5 @@ jobs:
 
             sudo docker-compose down --remove-orphans
             sudo docker-compose up -d
-            sudo docker rm $(docker ps --filter 'status=exited' -a -q)
+            sudo docker ps --filter 'status=exited' -a -q | xargs --no-run-if-empty sudo docker rm
             sudo docker image prune -f
