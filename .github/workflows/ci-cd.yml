@@ -102,7 +102,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
 
       ## deploy to develop
@@ -115,5 +115,5 @@ jobs:
           key: ${{ secrets.PEM_KEY }}
           script: |
             sudo docker ps
-            sudo docker pull ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
-            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
+            sudo docker pull ${{ secrets.DOCKER_REPO }}:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
