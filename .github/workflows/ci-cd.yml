@@ -118,6 +118,8 @@ jobs:
             IMAGE_TAG=${{ secrets.DOCKER_REPO }}:${{ env.IMAGE_TAG }}
             MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
             sudo docker pull $IMAGE_TAG
+            cd MARU_EGG_BE
+            git pull
             echo "
             version: '3.8'
             services:
