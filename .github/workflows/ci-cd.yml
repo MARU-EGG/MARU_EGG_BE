@@ -7,6 +7,10 @@ on:
     branches:
       - develop
 
+# 권한 설정
+permissions:
+  contents: read
+
 jobs:
   CI:
     runs-on: ubuntu-latest
@@ -22,16 +26,20 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      # Grant execute permission for gradlew
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
       # Cache Gradle packages
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+      # Grant execute permission for gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # gradle build
+      - name: Build with Gradle
+        run: ./gradlew build -x test
 
       # 환경별 yml 파일 생성 - dev
       - name: make application-dev.yml
@@ -41,10 +49,6 @@ jobs:
           touch ./application-dev.yml
           echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
         shell: bash
-
-      # gradle build
-      - name: Build with Gradle
-        run: ./gradlew build -x test
 
       # Check if the JAR file exists
       - name: Check JAR file exists
@@ -90,6 +94,7 @@ jobs:
       # Build and push Docker image
       - name: Build and push Docker image
         if: contains(github.ref, 'develop')
+        id: docker_build
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -98,6 +103,10 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       ## deploy to develop
+      - name: Set Docker image tag variable
+        if: contains(github.ref, 'develop')
+        run: echo "IMAGE_TAG=${{ secrets.DOCKER_REPO }}:${{ steps.meta.outputs.tags }}-${{ github.run_number }}" >> $GITHUB_ENV
+
       - name: Deploy to EC2 dev
         uses: appleboy/ssh-action@master
         if: contains(github.ref, 'develop')
@@ -106,8 +115,37 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PEM_KEY }}
           script: |
-            sudo docker pull ${{ secrets.DOCKER_REPO }}:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
-            sudo docker ps -q --filter "name=maru-egg" | grep -q . && sudo docker stop maru-egg-dev && sudo docker rm maru-egg || echo "No container to stop"
-            sudo docker run -d --name maru-egg --log-driver=syslog -p 8080:8080 ${{ secrets.DOCKER_REPO }}:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
-            sudo docker rm $(docker ps --filter 'status=exited' -a -q)
-            sudo docker image prune -f
+            IMAGE_TAG=${{ env.IMAGE_TAG }}
+            MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+            sudo docker pull $IMAGE_TAG
+            echo "
+            version: '3.8'
+            services:
+              db:
+                image: mysql:latest
+                container_name: maru-egg-db
+                ports:
+                  - '3306:3306'
+                environment:
+                  MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+                volumes:
+                  - maru-egg-db:/var/lib/mysql
+
+              app:
+                image: $IMAGE_TAG
+                container_name: maru-egg-app
+                ports:
+                  - '8080:8080'
+                depends_on:
+                  - db
+                environment:
+                  SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/maru_egg
+                  SPRING_DATASOURCE_USERNAME: root
+                  SPRING_DATASOURCE_PASSWORD: $MYSQL_ROOT_PASSWORD
+
+            volumes:
+              maru-egg-db:
+            " > docker-compose.yml
+
+            sudo docker-compose down
+            sudo docker-compose up -d
