@@ -130,8 +130,6 @@ jobs:
                   MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
                 volumes:
                   - maru-egg-db:/var/lib/mysql
-                networks:
-                  - dev_network
 
               app:
                 restart: on-failure
@@ -146,11 +144,9 @@ jobs:
                   SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/maru_egg
                   SPRING_DATASOURCE_USERNAME: root
                   SPRING_DATASOURCE_PASSWORD: $MYSQL_ROOT_PASSWORD
-                networks:
-                  - dev_network
             
-              networks:
-                dev_network:
+              volumes:
+                maru-egg-db:
             " > docker-compose.yml
 
             sudo docker-compose down --remove-orphans
