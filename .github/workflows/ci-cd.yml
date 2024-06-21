@@ -108,6 +108,6 @@ jobs:
           script: |
             sudo docker pull ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
             sudo docker stop $(docker ps -a -q)
-            sudo docker run -d --log-driver=syslog -p 8080:8080 -e ${{ secrets.DOCKER_USERNAME }}/maru-egg-dev
+            sudo docker run -d --log-driver=syslog -p 8080:8080 -e ${{ secrets.DOCKER_USERNAME }}/maru-egg:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
             sudo docker rm $(docker ps --filter 'status=exited' -a -q)
             sudo docker image prune -f
