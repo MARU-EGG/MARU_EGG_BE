@@ -119,7 +119,7 @@ jobs:
             MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
             sudo docker pull $IMAGE_TAG
             echo "
-            version: '3.8'
+            version: '3'
             services:
               db:
                 image: mysql:latest
@@ -149,3 +149,5 @@ jobs:
 
             sudo docker-compose down
             sudo docker-compose up -d
+            sudo docker rm $(docker ps --filter 'status=exited' -a -q)
+            sudo docker image prune -f
