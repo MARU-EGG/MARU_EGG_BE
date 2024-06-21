@@ -130,6 +130,8 @@ jobs:
                   MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
                 volumes:
                   - maru-egg-db:/var/lib/mysql
+                networks:
+                  - dev_network
 
               app:
                 restart: on-failure
