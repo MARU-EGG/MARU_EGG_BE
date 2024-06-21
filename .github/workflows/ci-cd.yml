@@ -105,7 +105,7 @@ jobs:
       ## deploy to develop
       - name: Set Docker image tag variable
         if: contains(github.ref, 'develop')
-        run: echo "IMAGE_TAG=${{ secrets.DOCKER_REPO }}:${{ steps.meta.outputs.tags }}-${{ github.run_number }}" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=${{ steps.meta.outputs.tags }}-${{ github.run_number }}" >> $GITHUB_ENV
 
       - name: Deploy to EC2 dev
         uses: appleboy/ssh-action@master
@@ -115,7 +115,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PEM_KEY }}
           script: |
-            IMAGE_TAG=${{ env.IMAGE_TAG }}
+            IMAGE_TAG=${{ secrets.DOCKER_REPO }}:${{ env.IMAGE_TAG }}
             MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
             sudo docker pull $IMAGE_TAG
             echo "
