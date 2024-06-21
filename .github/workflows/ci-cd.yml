@@ -90,6 +90,9 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ secrets.DOCKER_REPO }}
+          tags: |
+            type=ref,event=branch,pattern=develop
+            type=raw,value=${{ github.run_number }}
 
       # Build and push Docker image
       - name: Build and push Docker image
@@ -99,7 +102,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       ## deploy to develop
@@ -112,5 +115,5 @@ jobs:
           key: ${{ secrets.PEM_KEY }}
           script: |
             sudo docker ps
-            sudo docker pull ${{ secrets.USERNAME }}/maru-egg:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
-            sudo docker run -d -p 8080:8080 ${{ secrets.USERNAME }}/maru-egg:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
+            sudo docker pull ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
