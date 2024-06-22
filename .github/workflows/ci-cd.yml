@@ -59,6 +59,25 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # Metadata action
+      - name: Metadata action
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ secrets.DOCKER_REPO }}
+
+      # Build and push Docker image
+      - name: Build and push Docker image
+        if: contains(github.ref, 'develop')
+        id: docker_build
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+
   CD:
     runs-on: ubuntu-latest
 
