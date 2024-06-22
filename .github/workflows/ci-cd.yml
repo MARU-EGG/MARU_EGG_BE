@@ -50,7 +50,6 @@ jobs:
           cd ./src/main/resources
           touch ./application.yml
           echo "${{ secrets.YML }}" > ./application.yml
-          cat application.yml
         shell: bash
 
       # 환경별 yml 파일 생성 - dev
