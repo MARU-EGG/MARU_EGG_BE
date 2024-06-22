@@ -107,4 +107,4 @@ jobs:
             sudo docker ps -qa
             sudo docker rmi $(docker images -q)
             sudo docker image prune -f
-            sudo docker run -p 8080:8080 ${{ secrets.DOCKER_REPO }}:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
+            sudo docker run -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/maru-egg:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
