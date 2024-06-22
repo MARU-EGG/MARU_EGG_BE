@@ -87,55 +87,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-#      ## deploy to develop
-#      - name: Set Docker image tag variable
-#        if: contains(github.ref, 'develop')
-#        run: echo "IMAGE_TAG=${{ steps.meta.outputs.tags }}-${{ github.run_number }}" >> $GITHUB_ENV
-#
-#      - name: Deploy to EC2 dev
-#        uses: appleboy/ssh-action@master
-#        if: contains(github.ref, 'develop')
-#        with:
-#          host: ${{ secrets.PUBLIC_DNS }}
-#          username: ${{ secrets.USERNAME }}
-#          key: ${{ secrets.PEM_KEY }}
-#          script: |
-#            IMAGE_TAG=${{ secrets.DOCKER_REPO }}:${{ env.IMAGE_TAG }}
-#            MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
-#            sudo docker pull $IMAGE_TAG
-#            cd MARU_EGG_BE
-#            git pull
-#            echo "
-#            version: '3.8'
-#            services:
-#              db:
-#                image: mysql:latest
-#                container_name: maru-egg-db
-#                ports:
-#                  - '3306:3306'
-#                environment:
-#                  MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-#                volumes:
-#                  - maru-egg-db:/var/lib/mysql
-#
-#              app:
-#                restart: on-failure
-#                image: $IMAGE_TAG
-#                container_name: maru-egg-app
-#                ports:
-#                  - '8080:8080'
-#                depends_on:
-#                  - db
-#                environment:
-#                  SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/maru_egg
-#                  SPRING_DATASOURCE_USERNAME: root
-#                  SPRING_DATASOURCE_PASSWORD: $MYSQL_ROOT_PASSWORD
-#
-#            volumes:
-#              maru-egg-db:
-#            " > docker-compose.yml
-#
-#            sudo docker-compose down --remove-orphans
-#            sudo docker-compose up -d
-#            sudo docker ps --filter 'status=exited' -a -q | xargs --no-run-if-empty sudo docker rm
-#            sudo docker image prune -f
+      #      ## deploy to develop
+      #      - name: Set Docker image tag variable
+      #        if: contains(github.ref, 'develop')
+      #        run: echo "IMAGE_TAG=${{ steps.meta.outputs.tags }}-${{ github.run_number }}" >> $GITHUB_ENV
+      #
+      - name: Deploy to EC2 dev
+        uses: appleboy/ssh-action@master
+        if: contains(github.ref, 'develop')
+        with:
+          host: ${{ secrets.PUBLIC_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PEM_KEY }}
+          script: |
+            sudo docker ps --filter 'status=exited' -a -q | xargs --no-run-if-empty sudo docker rm
+            sudo docker image prune -f
