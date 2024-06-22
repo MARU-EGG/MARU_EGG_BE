@@ -43,7 +43,7 @@ jobs:
         with:
           arguments: clean bootJar
 
-      # 환경별 yml 파일 생성 - dev
+      # 환경별 yml 파일 생성
       - name: make application.yml
         if: contains(github.ref, 'develop')
         run: |
