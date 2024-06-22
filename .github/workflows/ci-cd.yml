@@ -68,24 +68,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Metadata action
-      - name: Metadata action
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ secrets.DOCKER_REPO }}
-
-      # Build and push Docker image
-      - name: Build and push Docker image
-        if: contains(github.ref, 'develop')
-        id: docker_build
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
-          labels: ${{ steps.meta.outputs.labels }}
-
 #      ## deploy to develop
 #      - name: Set Docker image tag variable
 #        if: contains(github.ref, 'develop')
