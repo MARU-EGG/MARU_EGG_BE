@@ -54,7 +54,7 @@ jobs:
 
       # Docker 이미지 빌드
       - name: docker image build
-        run: docker build -t ${{ secrets.DOCKER_REPO }}
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/maru-egg
 
       # DockerHub 로그인
       - name: docker login
