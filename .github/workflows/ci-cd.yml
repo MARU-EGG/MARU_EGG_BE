@@ -37,9 +37,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # gradle build
+      # Spring Boot 애플리케이션 빌드
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: clean bootJar
 
       # 환경별 yml 파일 생성 - dev
       - name: make application-dev.yml
@@ -50,64 +52,68 @@ jobs:
           echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
         shell: bash
 
-      # Check if the JAR file exists
-      - name: Check JAR file exists
-        run: ls -al build/libs
+      # Docker 이미지 빌드
+      - name: docker image build
+        run: docker build -t ${{ secrets.DOCKER_REPO }}
 
-      # Upload JAR file as artifact
-      - name: Upload JAR file
-        uses: actions/upload-artifact@v3
+      # DockerHub 로그인
+      - name: docker login
+        uses: docker/login-action@v2
         with:
-          name: maru-egg-be-jar
-          path: build/libs/*.jar
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-  CD:
-    runs-on: ubuntu-latest
+      # Docker Hub 이미지 푸시
+      - name: docker Hub push
+        run: docker push ${{ secrets.DOCKER_REPO }}
 
-    needs: CI
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Download JAR file from artifact
-      - name: Download JAR file
-        uses: actions/download-artifact@v3
-        with:
-          name: maru-egg-be-jar
-          path: build/libs
-
-      #      # Log in to Docker Hub
-      #      - name: Log in to Docker Hub
-      #        uses: docker/login-action@v1
-      #        with:
-      #          username: ${{ secrets.DOCKER_USERNAME }}
-      #          password: ${{ secrets.DOCKER_PASSWORD }}
-      #
-      #      # Metadata action
-      #      - name: Metadata action
-      #        id: meta
-      #        uses: docker/metadata-action@v4
-      #        with:
-      #          images: ${{ secrets.DOCKER_REPO }}
-
-      - name: Docker build
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t spring-cicd .
-          docker tag spring-cicd ${{ secrets.DOCKER_REPO }}:${GITHUB_SHA::7}
-          docker push ${{ secrets.DOCKER_REPO }}:${GITHUB_SHA::7}
-
-      - name: Deploy to EC2 dev
-        uses: appleboy/ssh-action@master
-        if: contains(github.ref, 'develop')
-        with:
-          host: ${{ secrets.PUBLIC_DNS }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          envs: GITHUB_SHA
-          script: |
-            docker pull ${{ secrets.DOCKER_REPO }}:${GITHUB_SHA::7}
-            docker tag ${{ secrets.DOCKER_REPO }}:${GITHUB_SHA::7}
-            docker stop server
-            docker run -d --rm --name server -p 80:8080 maru-egg
+#  CD:
+#    runs-on: ubuntu-latest
+#
+#    needs: CI
+#
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v3
+#
+#      # Download JAR file from artifact
+#      - name: Download JAR file
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: maru-egg-be-jar
+#          path: build/libs
+#
+#      #      # Log in to Docker Hub
+#      #      - name: Log in to Docker Hub
+#      #        uses: docker/login-action@v1
+#      #        with:
+#      #          username: ${{ secrets.DOCKER_USERNAME }}
+#      #          password: ${{ secrets.DOCKER_PASSWORD }}
+#      #
+#      #      # Metadata action
+#      #      - name: Metadata action
+#      #        id: meta
+#      #        uses: docker/metadata-action@v4
+#      #        with:
+#      #          images: ${{ secrets.DOCKER_REPO }}
+#
+#      - name: Docker build
+#        run: |
+#          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+#          docker build -t spring-cicd .
+#          docker tag spring-cicd ${{ secrets.DOCKER_REPO }}:${GITHUB_SHA::7}
+#          docker push ${{ secrets.DOCKER_REPO }}:${GITHUB_SHA::7}
+#
+#      - name: Deploy to EC2 dev
+#        uses: appleboy/ssh-action@master
+#        if: contains(github.ref, 'develop')
+#        with:
+#          host: ${{ secrets.PUBLIC_DNS }}
+#          username: ${{ secrets.USERNAME }}
+#          key: ${{ secrets.PRIVATE_KEY }}
+#          envs: GITHUB_SHA
+#          script: |
+#            docker pull ${{ secrets.DOCKER_REPO }}:${GITHUB_SHA::7}
+#            docker tag ${{ secrets.DOCKER_REPO }}:${GITHUB_SHA::7}
+#            docker stop server
+#            docker run -d --rm --name server -p 80:8080 maru-egg
