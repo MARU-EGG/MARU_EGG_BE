@@ -95,11 +95,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      #      ## deploy to develop
-      #      - name: Set Docker image tag variable
-      #        if: contains(github.ref, 'develop')
-      #        run: echo "IMAGE_TAG=${{ steps.meta.outputs.tags }}-${{ github.run_number }}" >> $GITHUB_ENV
-
       - name: Deploy to EC2 dev
         uses: appleboy/ssh-action@master
         if: contains(github.ref, 'develop')
@@ -109,4 +104,7 @@ jobs:
           key: ${{ secrets.PEM_KEY }}
           script: |
             sudo docker ps --filter 'status=exited' -a -q | xargs --no-run-if-empty sudo docker rm
+            sudo docker ps -qa
+            sudo docker rmi $(docker images -q)
             sudo docker image prune -f
+            sudo docker run -p 8080:8080 ${{ secrets.DOCKER_REPO }}:${{ steps.meta.outputs.tags }}-${{ github.run_number }}
