@@ -19,7 +19,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Setup Java JDK
+      # Java JDK 설정
       - name: Setup Java JDK
         uses: actions/setup-java@v3
         with:
@@ -44,14 +44,14 @@ jobs:
           echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
         shell: bash
 
-      # Cache Gradle packages
+      # Gradle 패키지 캐시
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
-      # Grant execute permission for gradlew
+      # gradlew 실행 권한 부여
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
@@ -60,7 +60,12 @@ jobs:
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: clean bootJar
-      # Log in to Docker Hub
+
+      # Gradle로 테스트
+      - name: Test with Gradle
+        run: ./gradlew test --no-daemon
+
+      # Docker Hub에 로그인
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -74,7 +79,7 @@ jobs:
         with:
           images: ${{ secrets.DOCKER_REPO }}
 
-      # Build and push Docker image
+      # Docker image Build & push
       - name: Build and push Docker image
         if: contains(github.ref, 'develop')
         id: docker_build
@@ -94,6 +99,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Docker를 통해 EC2로 배포
       - name: Deploy to EC2 dev
         uses: appleboy/ssh-action@master
         if: contains(github.ref, 'develop')
