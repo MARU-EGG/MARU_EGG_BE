@@ -20,7 +20,7 @@ public class SwaggerConfig {
 	private Info apiInfo() {
 		return new Info()
 			.title("MARU EGG REST API")
-			.description("명지대 입학처 챗봇, MARU EGG REST API 문서입니다.")
+			.description("명지대 입학처 챗봇, MARU EGG REST API 문서.")
 			.version("1.0.0");
 	}
 }
