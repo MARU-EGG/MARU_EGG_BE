@@ -1,4 +1,4 @@
-package mju.iphak.maru_egg.config;
+package mju.iphak.maru_egg.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
