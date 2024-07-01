@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: MARU_EGG_BE
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update # 변경: 테스트 중에 필요한 테이블을 생성하도록 설정합니다.
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:tc:mysql:8.0.26:///testdb # Testcontainers URL 포맷
+    username: test
+    password: test
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
