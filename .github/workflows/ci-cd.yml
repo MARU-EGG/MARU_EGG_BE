@@ -41,6 +41,14 @@ jobs:
           echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
         shell: bash
 
+      # 환경별 docker compose 파일 생성 - dev
+      - name: make compose-dev.yaml
+        if: contains(github.ref, 'develop')
+        run: |
+          touch ./compose-dev.yaml
+          echo "${{ secrets.COMPOSE_YML_DEV }}" > ./compose-dev.yaml
+        shell: bash
+
       # Gradle 패키지 캐시
       - name: Cache Gradle packages
         uses: actions/cache@v3
