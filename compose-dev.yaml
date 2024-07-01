@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql:latest'
+    env:
+      MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      MYSQL_USER: ${{ secrets.DB_USERNAME }}
+      MYSQL_URL: ${{ secrets.DB_URL }}
+    ports:
+      - '3316:3306'

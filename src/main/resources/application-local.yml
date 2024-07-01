@@ -19,7 +19,7 @@ spring:
 
   docker:
     compose:
-      file: compose.yaml
+      file: compose-local.yaml
       enabled: true
       lifecycle-management: none
       start:
