@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=maruegg'
+      - 'MYSQL_PASSWORD=maruegg!'
+      - 'MYSQL_ROOT_PASSWORD=maruegg!'
+      - 'MYSQL_USER=maruegg'
+    ports:
+      - '3316:3306'
