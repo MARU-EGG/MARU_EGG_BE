@@ -13,4 +13,25 @@ spring:
       hibernate:
         default_schema: ${DB_SCHEMA}
         format_sql: true
+        highlight_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
     defer-datasource-initialization: false
+
+  docker:
+    compose:
+      file: compose-dev.yaml
+      enabled: true
+      lifecycle-management: none
+      start:
+        command: up
+      stop:
+        command: down
+        timeout: 1m
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
