@@ -13,5 +13,4 @@ class MaruEggApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
