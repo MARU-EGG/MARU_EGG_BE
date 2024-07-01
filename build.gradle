@@ -43,9 +43,6 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:mysql'
     testImplementation 'org.testcontainers:jdbc:1.19.7'
-    if (project.hasProperty('local')) {
-        runtimeOnly 'org.springframework.boot:spring-boot-docker-compose'
-    }
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

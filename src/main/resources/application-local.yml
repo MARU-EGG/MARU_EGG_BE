@@ -13,20 +13,9 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3316/maruegg
-    username: maruegg
+    url: jdbc:mysql://localhost:3316/maru-egg-local
+    username: root
     password: maruegg!
-
-  docker:
-    compose:
-      file: compose-local.yaml
-      enabled: true
-      lifecycle-management: none
-      start:
-        command: up
-      stop:
-        command: down
-        timeout: 1m
 
 logging:
   level:
