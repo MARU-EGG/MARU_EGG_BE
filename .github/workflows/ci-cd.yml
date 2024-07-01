@@ -41,7 +41,7 @@ jobs:
           echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
         shell: bash
 
-      # 환경별 docker compose 파일 생성 - dev
+      # docker compose 파일 생성 - dev
       - name: make compose-dev.yaml
         if: contains(github.ref, 'develop')
         run: |
