@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import mju.iphak.maru_egg.admission.api.swagger.AdmissionTypeStatusControllerDocs;
 import mju.iphak.maru_egg.admission.application.status.query.find.FindAllAdmissionTypeStatus;
-import mju.iphak.maru_egg.admission.dto.response.AdmissionTypeStatusResponse;
+import mju.iphak.maru_egg.admission.api.dto.response.AdmissionTypeStatusResponse;
 
 @RequiredArgsConstructor
 @RestController

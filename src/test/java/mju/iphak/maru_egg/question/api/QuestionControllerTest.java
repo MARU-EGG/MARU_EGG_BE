@@ -25,9 +25,9 @@ import mju.iphak.maru_egg.answerreference.domain.AnswerReference;
 import mju.iphak.maru_egg.answerreference.repository.AnswerReferenceRepository;
 import mju.iphak.maru_egg.common.IntegrationTest;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.request.FindQuestionsRequest;
-import mju.iphak.maru_egg.question.dto.request.QuestionRequest;
-import mju.iphak.maru_egg.question.dto.request.SearchQuestionsRequest;
+import mju.iphak.maru_egg.question.api.dto.request.FindQuestionsRequest;
+import mju.iphak.maru_egg.question.api.dto.request.QuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.request.SearchQuestionsRequest;
 import mju.iphak.maru_egg.question.repository.QuestionRepository;
 
 class QuestionControllerTest extends IntegrationTest {

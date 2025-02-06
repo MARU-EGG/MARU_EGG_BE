@@ -25,13 +25,13 @@ import mju.iphak.maru_egg.answer.domain.Answer;
 import mju.iphak.maru_egg.answer.repository.AnswerRepository;
 import mju.iphak.maru_egg.common.RepositoryTest;
 import mju.iphak.maru_egg.common.dto.pagination.SliceQuestionResponse;
-import mju.iphak.maru_egg.question.dao.request.QuestionCoreDAO;
-import mju.iphak.maru_egg.question.dao.request.SelectQuestions;
-import mju.iphak.maru_egg.question.dao.response.QuestionCore;
+import mju.iphak.maru_egg.question.api.dto.request.QuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.response.SearchedQuestionsResponse;
 import mju.iphak.maru_egg.question.domain.QQuestion;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.request.QuestionRequest;
-import mju.iphak.maru_egg.question.dto.response.SearchedQuestionsResponse;
+import mju.iphak.maru_egg.question.repository.dto.request.QuestionCoreRequest;
+import mju.iphak.maru_egg.question.repository.dto.request.SelectQuestionsRequest;
+import mju.iphak.maru_egg.question.repository.dto.response.QuestionCoreResponse;
 
 class QuestionRepositoryImplTest extends RepositoryTest {
 
@@ -134,10 +134,11 @@ class QuestionRepositoryImplTest extends RepositoryTest {
 		AdmissionCategory category = AdmissionCategory.ADMISSION_GUIDELINE;
 		String content = "수시 일정 알려주세요.";
 		QuestionRequest request = new QuestionRequest(type, category, content);
-		QuestionCoreDAO questionCoreDAO = QuestionCoreDAO.of(request, invalidContentToken);
+		QuestionCoreRequest questionCoreRequest = QuestionCoreRequest.of(request, invalidContentToken);
 
 		// when
-		Optional<List<QuestionCore>> result = questionRepositoryImpl.searchQuestions(questionCoreDAO);
+		Optional<List<QuestionCoreResponse>> result = questionRepositoryImpl.searchQuestions(
+			questionCoreRequest);
 
 		// then
 		assertThat(result).isPresent();
@@ -176,10 +177,11 @@ class QuestionRepositoryImplTest extends RepositoryTest {
 		AdmissionCategory category = AdmissionCategory.ADMISSION_GUIDELINE;
 		String content = "수시 일정 알려주세요.";
 		QuestionRequest request = new QuestionRequest(type, category, content);
-		QuestionCoreDAO questionCoreDAO = QuestionCoreDAO.of(request, invalidContentToken);
+		QuestionCoreRequest questionCoreRequest = QuestionCoreRequest.of(request, invalidContentToken);
 
 		// when
-		Optional<List<QuestionCore>> result = questionRepositoryImpl.searchQuestions(questionCoreDAO);
+		Optional<List<QuestionCoreResponse>> result = questionRepositoryImpl.searchQuestions(
+			questionCoreRequest);
 
 		// then
 		assertThat(result).isPresent();
@@ -192,12 +194,13 @@ class QuestionRepositoryImplTest extends RepositoryTest {
 		// given
 		String content = "존재하지 않는 질문";
 		Pageable pageable = PageRequest.of(0, 3);
-		SelectQuestions selectQuestions = SelectQuestions.of(AdmissionType.SUSI, AdmissionCategory.ADMISSION_GUIDELINE,
+		SelectQuestionsRequest selectQuestionsRequest = SelectQuestionsRequest.of(AdmissionType.SUSI,
+			AdmissionCategory.ADMISSION_GUIDELINE,
 			content, null, null, pageable);
 
 		// when
 		SliceQuestionResponse<SearchedQuestionsResponse> result = questionRepositoryImpl.searchQuestionsOfCursorPaging(
-			selectQuestions);
+			selectQuestionsRequest);
 
 		// then
 		assertThat(result.data()).isEmpty();

@@ -15,18 +15,18 @@ import org.mockito.MockitoAnnotations;
 
 import mju.iphak.maru_egg.admission.domain.AdmissionCategory;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
+import mju.iphak.maru_egg.answer.api.dto.request.CreateAnswerRequest;
 import mju.iphak.maru_egg.answer.application.command.create.CreateCustomAnswerService;
 import mju.iphak.maru_egg.answer.application.query.find.FindAnswerByQuestionIdService;
 import mju.iphak.maru_egg.answer.domain.Answer;
-import mju.iphak.maru_egg.answer.dto.request.CreateAnswerRequest;
 import mju.iphak.maru_egg.answer.repository.AnswerRepository;
 import mju.iphak.maru_egg.common.MockTest;
+import mju.iphak.maru_egg.question.api.dto.request.CreateQuestionRequest;
 import mju.iphak.maru_egg.question.application.command.create.CreateCustomQuestionService;
-import mju.iphak.maru_egg.question.dao.request.QuestionCoreDAO;
-import mju.iphak.maru_egg.question.dao.response.QuestionCore;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.request.CreateQuestionRequest;
 import mju.iphak.maru_egg.question.repository.QuestionRepository;
+import mju.iphak.maru_egg.question.repository.dto.request.QuestionCoreRequest;
+import mju.iphak.maru_egg.question.repository.dto.response.QuestionCoreResponse;
 
 class CreateCustomQuestionServiceTest extends MockTest {
 
@@ -58,8 +58,9 @@ class CreateCustomQuestionServiceTest extends MockTest {
 		when(answer.getId()).thenReturn(1L);
 		when(findAnswerByQuestionId.invoke(1L)).thenReturn(answer);
 		when(answerRepository.findByQuestionId(anyLong())).thenReturn(Optional.of(answer));
-		when(questionRepository.searchQuestions(any(QuestionCoreDAO.class)))
-			.thenReturn(Optional.of(List.of(QuestionCore.of(1L, "테스트 질문입니다."))));
+		when(questionRepository.searchQuestions(any(QuestionCoreRequest.class)))
+			.thenReturn(Optional.of(List.of(
+				QuestionCoreResponse.of(1L, "테스트 질문입니다."))));
 		when(questionRepository.findById(1L)).thenReturn(Optional.of(question));
 	}
 

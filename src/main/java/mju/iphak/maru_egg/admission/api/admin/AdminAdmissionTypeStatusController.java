@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import mju.iphak.maru_egg.admission.api.swagger.AdminAdmissionTypeStatusControllerDocs;
 import mju.iphak.maru_egg.admission.application.status.command.init.InitAdmissionTypeStatus;
 import mju.iphak.maru_egg.admission.application.status.command.update.UpdateAdmissionTypeStatus;
-import mju.iphak.maru_egg.admission.dto.request.UpdateAdmissionTypeStatusRequest;
+import mju.iphak.maru_egg.admission.api.dto.request.UpdateAdmissionTypeStatusRequest;
 
 @RequiredArgsConstructor
 @RestController

@@ -9,9 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import mju.iphak.maru_egg.common.meta.CustomApiResponse;
 import mju.iphak.maru_egg.common.meta.CustomApiResponses;
-import mju.iphak.maru_egg.question.dto.request.CheckQuestionRequest;
-import mju.iphak.maru_egg.question.dto.request.CreateQuestionRequest;
-import mju.iphak.maru_egg.question.dto.request.UpdateQuestionContentRequest;
+import mju.iphak.maru_egg.question.api.dto.request.CheckQuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.request.CreateQuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.request.UpdateQuestionContentRequest;
 
 @Tag(name = "Admin Question API", description = "어드민 질문 관련 API 입니다.")
 public interface AdminQuestionControllerDocs {

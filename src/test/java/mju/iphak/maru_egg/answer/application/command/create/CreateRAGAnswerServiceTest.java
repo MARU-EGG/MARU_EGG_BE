@@ -20,7 +20,7 @@ import mju.iphak.maru_egg.answerreference.application.create.BatchCreateAnswerRe
 import mju.iphak.maru_egg.answerreference.dto.response.AnswerReferenceResponse;
 import mju.iphak.maru_egg.common.MockTest;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.request.SaveRAGAnswerRequest;
+import mju.iphak.maru_egg.question.api.dto.request.SaveRAGAnswerRequest;
 import mju.iphak.maru_egg.question.repository.QuestionRepository;
 
 class CreateRAGAnswerServiceTest extends MockTest {

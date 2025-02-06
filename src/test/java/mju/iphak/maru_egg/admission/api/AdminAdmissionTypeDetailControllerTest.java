@@ -17,8 +17,8 @@ import mju.iphak.maru_egg.admission.application.detail.query.find.FindAllAdmissi
 import mju.iphak.maru_egg.admission.application.status.command.init.InitAdmissionTypeStatusService;
 import mju.iphak.maru_egg.admission.application.status.query.find.FindAdmissionTypeStatusService;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
-import mju.iphak.maru_egg.admission.dto.request.CreateAdmissionTypeDetailRequest;
-import mju.iphak.maru_egg.admission.dto.request.UpdateAdmissionTypeDetailRequest;
+import mju.iphak.maru_egg.admission.api.dto.request.CreateAdmissionTypeDetailRequest;
+import mju.iphak.maru_egg.admission.api.dto.request.UpdateAdmissionTypeDetailRequest;
 import mju.iphak.maru_egg.common.IntegrationTest;
 
 @WithMockUser(roles = "ADMIN")

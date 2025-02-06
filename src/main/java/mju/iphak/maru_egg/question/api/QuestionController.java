@@ -19,12 +19,12 @@ import mju.iphak.maru_egg.question.application.query.find.FindAllPagedQuestions;
 import mju.iphak.maru_egg.question.application.query.find.FindAllQuestionsService;
 import mju.iphak.maru_egg.question.application.query.find.FindQuestion;
 import mju.iphak.maru_egg.question.application.query.process.ProcessQuestion;
-import mju.iphak.maru_egg.question.dto.request.FindQuestionsRequest;
-import mju.iphak.maru_egg.question.dto.request.QuestionRequest;
-import mju.iphak.maru_egg.question.dto.request.SearchQuestionsRequest;
-import mju.iphak.maru_egg.question.dto.response.QuestionListItemResponse;
-import mju.iphak.maru_egg.question.dto.response.QuestionResponse;
-import mju.iphak.maru_egg.question.dto.response.SearchedQuestionsResponse;
+import mju.iphak.maru_egg.question.api.dto.request.FindQuestionsRequest;
+import mju.iphak.maru_egg.question.api.dto.request.QuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.request.SearchQuestionsRequest;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionListItemResponse;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionResponse;
+import mju.iphak.maru_egg.question.api.dto.response.SearchedQuestionsResponse;
 
 @RequiredArgsConstructor
 @RestController

@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import mju.iphak.maru_egg.admission.domain.AdmissionTypeStatus;
-import mju.iphak.maru_egg.admission.dto.response.AdmissionTypeStatusResponse;
+import mju.iphak.maru_egg.admission.api.dto.response.AdmissionTypeStatusResponse;
 import mju.iphak.maru_egg.admission.repository.AdmissionTypeStatusRepository;
 
 @Service

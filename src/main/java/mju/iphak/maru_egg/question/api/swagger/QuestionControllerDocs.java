@@ -13,12 +13,12 @@ import jakarta.validation.Valid;
 import mju.iphak.maru_egg.common.dto.pagination.SliceQuestionResponse;
 import mju.iphak.maru_egg.common.meta.CustomApiResponse;
 import mju.iphak.maru_egg.common.meta.CustomApiResponses;
-import mju.iphak.maru_egg.question.dto.request.FindQuestionsRequest;
-import mju.iphak.maru_egg.question.dto.request.QuestionRequest;
-import mju.iphak.maru_egg.question.dto.request.SearchQuestionsRequest;
-import mju.iphak.maru_egg.question.dto.response.QuestionListItemResponse;
-import mju.iphak.maru_egg.question.dto.response.QuestionResponse;
-import mju.iphak.maru_egg.question.dto.response.SearchedQuestionsResponse;
+import mju.iphak.maru_egg.question.api.dto.request.FindQuestionsRequest;
+import mju.iphak.maru_egg.question.api.dto.request.QuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.request.SearchQuestionsRequest;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionListItemResponse;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionResponse;
+import mju.iphak.maru_egg.question.api.dto.response.SearchedQuestionsResponse;
 
 @Tag(name = "Question API", description = "질문 관련 API 입니다.")
 public interface QuestionControllerDocs {

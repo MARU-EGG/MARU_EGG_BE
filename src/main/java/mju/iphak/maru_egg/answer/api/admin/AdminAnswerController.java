@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mju.iphak.maru_egg.answer.api.swagger.AdminAnswerControllerDocs;
 import mju.iphak.maru_egg.answer.application.command.update.UpdateAnswerContent;
-import mju.iphak.maru_egg.answer.dto.request.UpdateAnswerContentRequest;
+import mju.iphak.maru_egg.answer.api.dto.request.UpdateAnswerContentRequest;
 
 @RequiredArgsConstructor
 @RestController

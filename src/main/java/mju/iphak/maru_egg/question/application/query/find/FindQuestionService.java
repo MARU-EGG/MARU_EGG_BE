@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import mju.iphak.maru_egg.answer.application.query.find.FindAnswerByQuestionId;
 import mju.iphak.maru_egg.answer.domain.Answer;
-import mju.iphak.maru_egg.answer.dto.response.AnswerResponse;
+import mju.iphak.maru_egg.answer.api.dto.response.AnswerResponse;
 import mju.iphak.maru_egg.answerreference.dto.response.AnswerReferenceResponse;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.response.QuestionResponse;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionResponse;
 
 @Service
 @Transactional(readOnly = true)

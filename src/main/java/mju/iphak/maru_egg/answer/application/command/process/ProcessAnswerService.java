@@ -12,11 +12,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mju.iphak.maru_egg.answer.application.command.create.CreateRAGAnswer;
 import mju.iphak.maru_egg.answer.application.query.rag.RagAnswer;
-import mju.iphak.maru_egg.answer.dto.request.LLMAskQuestionRequest;
-import mju.iphak.maru_egg.answer.dto.response.LLMAnswerResponse;
-import mju.iphak.maru_egg.question.dto.request.QuestionRequest;
-import mju.iphak.maru_egg.question.dto.request.SaveRAGAnswerRequest;
-import mju.iphak.maru_egg.question.dto.response.QuestionResponse;
+import mju.iphak.maru_egg.answer.api.dto.request.LLMAskQuestionRequest;
+import mju.iphak.maru_egg.answer.api.dto.response.LLMAnswerResponse;
+import mju.iphak.maru_egg.question.api.dto.request.QuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.request.SaveRAGAnswerRequest;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionResponse;
 
 @Slf4j
 @Service

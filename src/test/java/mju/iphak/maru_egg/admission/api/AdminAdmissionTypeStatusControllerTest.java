@@ -16,7 +16,7 @@ import mju.iphak.maru_egg.admission.application.status.command.delete.DeleteAdmi
 import mju.iphak.maru_egg.admission.application.status.command.init.InitAdmissionTypeStatusService;
 import mju.iphak.maru_egg.admission.application.status.query.find.FindAdmissionTypeStatusService;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
-import mju.iphak.maru_egg.admission.dto.request.UpdateAdmissionTypeStatusRequest;
+import mju.iphak.maru_egg.admission.api.dto.request.UpdateAdmissionTypeStatusRequest;
 import mju.iphak.maru_egg.common.IntegrationTest;
 
 @WithMockUser(roles = "ADMIN")

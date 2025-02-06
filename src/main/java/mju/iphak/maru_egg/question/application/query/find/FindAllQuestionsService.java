@@ -12,9 +12,9 @@ import mju.iphak.maru_egg.admission.domain.AdmissionCategory;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
 import mju.iphak.maru_egg.answer.application.query.find.FindAnswerByQuestionId;
 import mju.iphak.maru_egg.answer.domain.Answer;
-import mju.iphak.maru_egg.answer.dto.response.AnswerResponse;
+import mju.iphak.maru_egg.answer.api.dto.response.AnswerResponse;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.response.QuestionListItemResponse;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionListItemResponse;
 import mju.iphak.maru_egg.question.repository.QuestionRepository;
 
 @Slf4j

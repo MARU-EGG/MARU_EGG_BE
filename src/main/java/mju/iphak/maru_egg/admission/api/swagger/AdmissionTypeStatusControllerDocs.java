@@ -5,7 +5,7 @@ import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import mju.iphak.maru_egg.admission.dto.response.AdmissionTypeStatusResponse;
+import mju.iphak.maru_egg.admission.api.dto.response.AdmissionTypeStatusResponse;
 import mju.iphak.maru_egg.common.meta.CustomApiResponse;
 import mju.iphak.maru_egg.common.meta.CustomApiResponses;
 

@@ -15,9 +15,9 @@ import mju.iphak.maru_egg.question.application.command.check.CheckQuestion;
 import mju.iphak.maru_egg.question.application.command.create.CreateCustomQuestion;
 import mju.iphak.maru_egg.question.application.command.delete.DeleteQuestion;
 import mju.iphak.maru_egg.question.application.command.update.UpdateQuestionContent;
-import mju.iphak.maru_egg.question.dto.request.CheckQuestionRequest;
-import mju.iphak.maru_egg.question.dto.request.CreateQuestionRequest;
-import mju.iphak.maru_egg.question.dto.request.UpdateQuestionContentRequest;
+import mju.iphak.maru_egg.question.api.dto.request.CheckQuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.request.CreateQuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.request.UpdateQuestionContentRequest;
 
 @RequiredArgsConstructor
 @RestController

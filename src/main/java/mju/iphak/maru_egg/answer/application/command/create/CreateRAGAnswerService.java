@@ -10,7 +10,7 @@ import mju.iphak.maru_egg.answer.domain.Answer;
 import mju.iphak.maru_egg.answer.repository.AnswerRepository;
 import mju.iphak.maru_egg.answerreference.application.create.BatchCreateAnswerReference;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.request.SaveRAGAnswerRequest;
+import mju.iphak.maru_egg.question.api.dto.request.SaveRAGAnswerRequest;
 import mju.iphak.maru_egg.question.repository.QuestionRepository;
 
 @Slf4j
