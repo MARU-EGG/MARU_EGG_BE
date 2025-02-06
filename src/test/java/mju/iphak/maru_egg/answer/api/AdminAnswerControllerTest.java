@@ -19,7 +19,7 @@ import mju.iphak.maru_egg.admission.domain.AdmissionCategory;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
 import mju.iphak.maru_egg.answer.application.command.update.UpdateAnswerContentService;
 import mju.iphak.maru_egg.answer.domain.Answer;
-import mju.iphak.maru_egg.answer.dto.request.UpdateAnswerContentRequest;
+import mju.iphak.maru_egg.answer.api.dto.request.UpdateAnswerContentRequest;
 import mju.iphak.maru_egg.answer.repository.AnswerRepository;
 import mju.iphak.maru_egg.common.IntegrationTest;
 import mju.iphak.maru_egg.question.domain.Question;

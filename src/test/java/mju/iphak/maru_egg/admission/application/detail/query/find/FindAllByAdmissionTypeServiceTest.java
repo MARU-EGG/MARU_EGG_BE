@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
 import mju.iphak.maru_egg.admission.domain.AdmissionTypeDetail;
 import mju.iphak.maru_egg.admission.domain.AdmissionTypeStatus;
-import mju.iphak.maru_egg.admission.dto.response.AdmissionTypeDetailResponse;
+import mju.iphak.maru_egg.admission.api.dto.response.AdmissionTypeDetailResponse;
 import mju.iphak.maru_egg.admission.repository.AdmissionTypeDetailRepository;
 import mju.iphak.maru_egg.common.MockTest;
 

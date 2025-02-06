@@ -16,12 +16,12 @@ import mju.iphak.maru_egg.admission.domain.AdmissionType;
 import mju.iphak.maru_egg.answer.application.command.create.CreateRAGAnswer;
 import mju.iphak.maru_egg.answer.application.query.rag.RagAnswer;
 import mju.iphak.maru_egg.answer.domain.Answer;
-import mju.iphak.maru_egg.answer.dto.request.LLMAskQuestionRequest;
-import mju.iphak.maru_egg.answer.dto.response.LLMAnswerResponse;
+import mju.iphak.maru_egg.answer.api.dto.request.LLMAskQuestionRequest;
+import mju.iphak.maru_egg.answer.api.dto.response.LLMAnswerResponse;
 import mju.iphak.maru_egg.common.MockTest;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.request.QuestionRequest;
-import mju.iphak.maru_egg.question.dto.response.QuestionResponse;
+import mju.iphak.maru_egg.question.api.dto.request.QuestionRequest;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionResponse;
 import reactor.core.publisher.Mono;
 
 class ProcessAnswerServiceTest extends MockTest {

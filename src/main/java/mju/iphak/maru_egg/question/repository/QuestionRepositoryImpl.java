@@ -22,11 +22,11 @@ import lombok.RequiredArgsConstructor;
 import mju.iphak.maru_egg.admission.domain.AdmissionCategory;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
 import mju.iphak.maru_egg.common.dto.pagination.SliceQuestionResponse;
-import mju.iphak.maru_egg.question.dao.request.QuestionCoreDAO;
-import mju.iphak.maru_egg.question.dao.request.SelectQuestions;
-import mju.iphak.maru_egg.question.dao.response.QuestionCore;
+import mju.iphak.maru_egg.question.api.dto.response.SearchedQuestionsResponse;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.response.SearchedQuestionsResponse;
+import mju.iphak.maru_egg.question.repository.dto.request.QuestionCoreRequest;
+import mju.iphak.maru_egg.question.repository.dto.request.SelectQuestionsRequest;
+import mju.iphak.maru_egg.question.repository.dto.response.QuestionCoreResponse;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,31 +36,33 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
-	public Optional<List<QuestionCore>> searchQuestions(final QuestionCoreDAO questionCoreDAO) {
+	public Optional<List<QuestionCoreResponse>> searchQuestions(
+		final QuestionCoreRequest questionCoreRequest) {
 		return Optional.of(
 			searchQuestionsByContentTokenAndType(
-				questionCoreDAO.content(),
-				questionCoreDAO.contentToken(),
-				questionCoreDAO.type(),
-				questionCoreDAO.category()
+				questionCoreRequest.content(),
+				questionCoreRequest.contentToken(),
+				questionCoreRequest.type(),
+				questionCoreRequest.category()
 			).orElse(Collections.emptyList())
 		);
 	}
 
 	@Override
 	public SliceQuestionResponse<SearchedQuestionsResponse> searchQuestionsOfCursorPaging(
-		final SelectQuestions selectQuestions) {
+		final SelectQuestionsRequest selectQuestionsRequest) {
 		SliceQuestionResponse<SearchedQuestionsResponse> response = searchQuestionsOfCursorPagingByContentWithLikeFunction(
-			selectQuestions.type(),
-			selectQuestions.category(),
-			selectQuestions.content(),
-			selectQuestions.pageable());
+			selectQuestionsRequest.type(),
+			selectQuestionsRequest.category(),
+			selectQuestionsRequest.content(),
+			selectQuestionsRequest.pageable());
 		if (response.data().isEmpty()) {
 			response = searchQuestionsOfCursorPagingByContentWithFullTextSearch(
-				selectQuestions.type(),
-				selectQuestions.category(),
-				selectQuestions.content(),
-				selectQuestions.cursorViewCount(), selectQuestions.questionId(), selectQuestions.pageable());
+				selectQuestionsRequest.type(),
+				selectQuestionsRequest.category(),
+				selectQuestionsRequest.content(),
+				selectQuestionsRequest.cursorViewCount(), selectQuestionsRequest.questionId(),
+				selectQuestionsRequest.pageable());
 		}
 		return response;
 	}
@@ -95,7 +97,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 		return buildSliceQuestionResponse(pageable, pageSize, questions);
 	}
 
-	private Optional<List<QuestionCore>> searchQuestionsByContentTokenAndType(
+	private Optional<List<QuestionCoreResponse>> searchQuestionsByContentTokenAndType(
 		final String content, final String contentToken, final AdmissionType type, final AdmissionCategory category) {
 
 		NumberTemplate<Double> booleanTemplate = createBooleanTemplateByContent(content);
@@ -107,8 +109,9 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 			tuples = fetchQuestionsByContentAndTypeAndCategory(booleanTemplate, type, category);
 		}
 
-		List<QuestionCore> result = tuples.stream()
-			.map(tuple -> QuestionCore.of(tuple.get(question.id), tuple.get(question.contentToken)))
+		List<QuestionCoreResponse> result = tuples.stream()
+			.map(tuple -> QuestionCoreResponse.of(tuple.get(question.id),
+				tuple.get(question.contentToken)))
 			.collect(Collectors.toList());
 
 		return Optional.of(result);

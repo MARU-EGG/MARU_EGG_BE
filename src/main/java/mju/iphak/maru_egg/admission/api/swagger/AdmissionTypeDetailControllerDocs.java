@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
-import mju.iphak.maru_egg.admission.dto.response.AdmissionTypeDetailResponse;
+import mju.iphak.maru_egg.admission.api.dto.response.AdmissionTypeDetailResponse;
 
 @Tag(name = "AdmissionTypeDetail API", description = "입학타입 상세 관련 API 입니다.")
 public interface AdmissionTypeDetailControllerDocs {

@@ -13,8 +13,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import lombok.RequiredArgsConstructor;
-import mju.iphak.maru_egg.answer.dto.request.LLMAskQuestionRequest;
-import mju.iphak.maru_egg.answer.dto.response.LLMAnswerResponse;
+import mju.iphak.maru_egg.answer.api.dto.request.LLMAskQuestionRequest;
+import mju.iphak.maru_egg.answer.api.dto.response.LLMAnswerResponse;
 import mju.iphak.maru_egg.common.exception.custom.webClient.BadRequestWebClientException;
 import mju.iphak.maru_egg.common.exception.custom.webClient.InternalServerErrorWebClientException;
 import mju.iphak.maru_egg.common.exception.custom.webClient.NotFoundWebClientException;

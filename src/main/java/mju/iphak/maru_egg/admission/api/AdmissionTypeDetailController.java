@@ -12,7 +12,7 @@ import mju.iphak.maru_egg.admission.api.swagger.AdmissionTypeDetailControllerDoc
 import mju.iphak.maru_egg.admission.application.detail.query.find.FindAllAdmissionTypeDetail;
 import mju.iphak.maru_egg.admission.application.detail.query.find.FindAllByAdmissionType;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
-import mju.iphak.maru_egg.admission.dto.response.AdmissionTypeDetailResponse;
+import mju.iphak.maru_egg.admission.api.dto.response.AdmissionTypeDetailResponse;
 
 @RestController
 @RequestMapping("/api/admissions")

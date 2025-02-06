@@ -18,11 +18,11 @@ import mju.iphak.maru_egg.admission.domain.AdmissionCategory;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
 import mju.iphak.maru_egg.common.MockTest;
 import mju.iphak.maru_egg.common.dto.pagination.SliceQuestionResponse;
+import mju.iphak.maru_egg.question.api.dto.request.SearchQuestionsRequest;
+import mju.iphak.maru_egg.question.api.dto.response.SearchedQuestionsResponse;
 import mju.iphak.maru_egg.question.application.query.find.FindAllPagedQuestionsService;
-import mju.iphak.maru_egg.question.dao.request.SelectQuestions;
-import mju.iphak.maru_egg.question.dto.request.SearchQuestionsRequest;
-import mju.iphak.maru_egg.question.dto.response.SearchedQuestionsResponse;
 import mju.iphak.maru_egg.question.repository.QuestionRepository;
+import mju.iphak.maru_egg.question.repository.dto.request.SelectQuestionsRequest;
 
 class FindAllPagedQuestionsServiceTest extends MockTest {
 
@@ -57,7 +57,7 @@ class FindAllPagedQuestionsServiceTest extends MockTest {
 			questionId
 		);
 
-		SelectQuestions selectQuestions = SelectQuestions.of(
+		SelectQuestionsRequest selectQuestionsRequest = SelectQuestionsRequest.of(
 			request.type(),
 			request.category(),
 			request.content(),
@@ -74,7 +74,7 @@ class FindAllPagedQuestionsServiceTest extends MockTest {
 			List.of(searchedQuestionsResponse), 0, size, false, null, null
 		);
 
-		when(questionRepository.searchQuestionsOfCursorPaging(selectQuestions))
+		when(questionRepository.searchQuestionsOfCursorPaging(selectQuestionsRequest))
 			.thenReturn(expectedResponse);
 
 		// when
@@ -86,7 +86,7 @@ class FindAllPagedQuestionsServiceTest extends MockTest {
 		assertThat(result.hasNext()).isFalse();
 		assertThat(result.data().get(0).content()).isEqualTo("example content");
 
-		verify(questionRepository, times(1)).searchQuestionsOfCursorPaging(selectQuestions);
+		verify(questionRepository, times(1)).searchQuestionsOfCursorPaging(selectQuestionsRequest);
 	}
 
 	@DisplayName("[성공] 질문 자동완성 - 빈 결과 반환")
@@ -109,7 +109,7 @@ class FindAllPagedQuestionsServiceTest extends MockTest {
 			questionId
 		);
 
-		SelectQuestions selectQuestions = SelectQuestions.of(
+		SelectQuestionsRequest selectQuestionsRequest = SelectQuestionsRequest.of(
 			request.type(),
 			request.category(),
 			request.content(),
@@ -122,7 +122,7 @@ class FindAllPagedQuestionsServiceTest extends MockTest {
 			List.of(), 0, size, false, null, null
 		);
 
-		when(questionRepository.searchQuestionsOfCursorPaging(selectQuestions))
+		when(questionRepository.searchQuestionsOfCursorPaging(selectQuestionsRequest))
 			.thenReturn(emptyResponse);
 
 		// when
@@ -133,6 +133,6 @@ class FindAllPagedQuestionsServiceTest extends MockTest {
 		assertThat(result.data()).isEmpty();
 		assertThat(result.hasNext()).isFalse();
 
-		verify(questionRepository, times(1)).searchQuestionsOfCursorPaging(selectQuestions);
+		verify(questionRepository, times(1)).searchQuestionsOfCursorPaging(selectQuestionsRequest);
 	}
 }

@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import mju.iphak.maru_egg.answer.dto.request.UpdateAnswerContentRequest;
+import mju.iphak.maru_egg.answer.api.dto.request.UpdateAnswerContentRequest;
 import mju.iphak.maru_egg.common.meta.CustomApiResponse;
 import mju.iphak.maru_egg.common.meta.CustomApiResponses;
 

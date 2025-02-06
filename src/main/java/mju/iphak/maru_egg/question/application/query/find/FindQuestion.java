@@ -1,6 +1,6 @@
 package mju.iphak.maru_egg.question.application.query.find;
 
-import mju.iphak.maru_egg.question.dto.response.QuestionResponse;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionResponse;
 
 public interface FindQuestion {
 

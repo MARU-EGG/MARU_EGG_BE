@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import mju.iphak.maru_egg.common.utils.NLP.TextSimilarityUtils;
-import mju.iphak.maru_egg.question.dao.response.QuestionCore;
-import mju.iphak.maru_egg.question.dto.response.SimilarityResult;
+import mju.iphak.maru_egg.question.api.dto.response.SimilarityResult;
+import mju.iphak.maru_egg.question.repository.dto.response.QuestionCoreResponse;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,12 +21,12 @@ public class FindMostSimilarQuestionIdService implements FindMostSimilarQuestion
 
 	private static final double STANDARD_SIMILARITY = 0.95;
 
-	public Long invoke(List<QuestionCore> questionCores, String contentToken) {
-		Map<CharSequence, Integer> inputQuestionTfIdf = computeTfIdf(questionCores, contentToken);
+	public Long invoke(List<QuestionCoreResponse> questionCoreResponses, String contentToken) {
+		Map<CharSequence, Integer> inputQuestionTfIdf = computeTfIdf(questionCoreResponses, contentToken);
 
-		return questionCores.stream()
+		return questionCoreResponses.stream()
 			.map(core -> {
-				Map<CharSequence, Integer> coreQuestionTfIdf = computeTfIdf(questionCores, core.contentToken());
+				Map<CharSequence, Integer> coreQuestionTfIdf = computeTfIdf(questionCoreResponses, core.contentToken());
 				double similarity = TextSimilarityUtils.computeCosineSimilarity(inputQuestionTfIdf, coreQuestionTfIdf);
 				return new SimilarityResult(core.id(), similarity);
 			})
@@ -36,9 +36,10 @@ public class FindMostSimilarQuestionIdService implements FindMostSimilarQuestion
 			.orElse(null);
 	}
 
-	private Map<CharSequence, Integer> computeTfIdf(List<QuestionCore> questionCores, String contentToken) {
-		List<String> contentTokens = questionCores.stream()
-			.map(QuestionCore::contentToken)
+	private Map<CharSequence, Integer> computeTfIdf(List<QuestionCoreResponse> questionCoreResponses,
+		String contentToken) {
+		List<String> contentTokens = questionCoreResponses.stream()
+			.map(QuestionCoreResponse::contentToken)
 			.toList();
 
 		try {

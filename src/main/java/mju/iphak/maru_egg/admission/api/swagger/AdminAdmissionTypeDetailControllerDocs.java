@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import mju.iphak.maru_egg.admission.dto.request.CreateAdmissionTypeDetailRequest;
-import mju.iphak.maru_egg.admission.dto.request.UpdateAdmissionTypeDetailRequest;
+import mju.iphak.maru_egg.admission.api.dto.request.CreateAdmissionTypeDetailRequest;
+import mju.iphak.maru_egg.admission.api.dto.request.UpdateAdmissionTypeDetailRequest;
 
 @Tag(name = "Admin AdmissionTypeDetail API", description = "어드민 입학타입 상세 관련 API 입니다.")
 public interface AdminAdmissionTypeDetailControllerDocs {

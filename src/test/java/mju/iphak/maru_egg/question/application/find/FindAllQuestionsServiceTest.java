@@ -19,12 +19,12 @@ import mju.iphak.maru_egg.admission.domain.AdmissionType;
 import mju.iphak.maru_egg.answer.application.query.find.FindAnswerByQuestionIdService;
 import mju.iphak.maru_egg.answer.domain.Answer;
 import mju.iphak.maru_egg.common.MockTest;
+import mju.iphak.maru_egg.question.api.dto.response.QuestionListItemResponse;
 import mju.iphak.maru_egg.question.application.query.find.FindAllQuestionsService;
-import mju.iphak.maru_egg.question.dao.request.QuestionCoreDAO;
-import mju.iphak.maru_egg.question.dao.response.QuestionCore;
 import mju.iphak.maru_egg.question.domain.Question;
-import mju.iphak.maru_egg.question.dto.response.QuestionListItemResponse;
 import mju.iphak.maru_egg.question.repository.QuestionRepository;
+import mju.iphak.maru_egg.question.repository.dto.request.QuestionCoreRequest;
+import mju.iphak.maru_egg.question.repository.dto.response.QuestionCoreResponse;
 
 class FindAllQuestionsServiceTest extends MockTest {
 
@@ -49,8 +49,9 @@ class FindAllQuestionsServiceTest extends MockTest {
 		when(question.getId()).thenReturn(1L);
 		when(answer.getId()).thenReturn(1L);
 		when(findAnswerByQuestionId.invoke(1L)).thenReturn(answer);
-		when(questionRepository.searchQuestions(any(QuestionCoreDAO.class)))
-			.thenReturn(Optional.of(List.of(QuestionCore.of(1L, "테스트 질문입니다."))));
+		when(questionRepository.searchQuestions(any(QuestionCoreRequest.class)))
+			.thenReturn(Optional.of(List.of(
+				QuestionCoreResponse.of(1L, "테스트 질문입니다."))));
 		when(questionRepository.findById(1L)).thenReturn(Optional.of(question));
 	}
 

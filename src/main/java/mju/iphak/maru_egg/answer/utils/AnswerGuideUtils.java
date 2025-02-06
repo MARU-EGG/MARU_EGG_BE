@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import mju.iphak.maru_egg.answer.dto.response.LLMAnswerResponse;
+import mju.iphak.maru_egg.answer.api.dto.response.LLMAnswerResponse;
 import mju.iphak.maru_egg.answerreference.dto.response.AnswerReferenceResponse;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

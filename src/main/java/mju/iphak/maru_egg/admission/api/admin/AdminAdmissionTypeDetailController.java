@@ -13,8 +13,8 @@ import mju.iphak.maru_egg.admission.api.swagger.AdminAdmissionTypeDetailControll
 import mju.iphak.maru_egg.admission.application.detail.command.create.CreateAdmissionTypeDetail;
 import mju.iphak.maru_egg.admission.application.detail.command.delete.DeleteAdmissionTypeDetail;
 import mju.iphak.maru_egg.admission.application.detail.command.update.UpdateAdmissionTypeDetail;
-import mju.iphak.maru_egg.admission.dto.request.CreateAdmissionTypeDetailRequest;
-import mju.iphak.maru_egg.admission.dto.request.UpdateAdmissionTypeDetailRequest;
+import mju.iphak.maru_egg.admission.api.dto.request.CreateAdmissionTypeDetailRequest;
+import mju.iphak.maru_egg.admission.api.dto.request.UpdateAdmissionTypeDetailRequest;
 
 @RestController
 @RequestMapping("/api/admin/admissions")
