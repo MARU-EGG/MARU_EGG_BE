@@ -119,11 +119,15 @@ jobs:
       - name: Check if nginx.conf has changed
         id: check_nginx
         run: |
-          git fetch origin develop
-          CHANGED_FILES=$(git diff --name-only origin/develop..HEAD)
+          f [ "${{ github.event.before }}" == "" ]; then
+             BASE_REF=${{ github.event.pull_request.base.sha }} 
+           else
+             BASE_REF=${{ github.event.before }} 
+           fi
           
-          echo "Changed files:"
-          echo "$CHANGED_FILES"
+           git fetch origin $BASE_REF --depth=0
+           CHANGED_FILES=$(git diff --name-only $BASE_REF ${{ github.sha }})
+           echo "Changed files: $CHANGED_FILES"
           
           if echo "$CHANGED_FILES" | grep -q "nginx/conf.d/nginx.conf"; then
             echo "NGINX_CHANGED=true" >> $GITHUB_ENV
