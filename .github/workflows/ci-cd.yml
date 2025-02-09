@@ -125,7 +125,7 @@ jobs:
              BASE_REF=${{ github.event.before }} 
           fi
           
-           git fetch origin $BASE_REF --depth=0
+           git fetch origin $BASE_REF --depth=1
            CHANGED_FILES=$(git diff --name-only $BASE_REF ${{ github.sha }})
            echo "Changed files: $CHANGED_FILES"
           
