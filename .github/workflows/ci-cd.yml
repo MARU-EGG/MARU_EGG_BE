@@ -186,7 +186,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PEM_KEY }}
           source: "nginx/conf.d/nginx.conf"
-          target: "/home/${{ secrets.USERNAME }}/nginx/conf.d/nginx.conf"
+          target: "/home/${{ secrets.USERNAME }}/nginx/conf.d/"
           strip_components: 2
           overwrite: true
           debug: true
