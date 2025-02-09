@@ -119,7 +119,7 @@ jobs:
       - name: Check if nginx.conf has changed
         id: check_nginx
         run: |
-          f [ "${{ github.event.before }}" == "" ]; then
+          if [ "${{ github.event.before }}" == "" ]; then
              BASE_REF=${{ github.event.pull_request.base.sha }} 
            else
              BASE_REF=${{ github.event.before }} 
