@@ -202,7 +202,7 @@ jobs:
             echo "Copying new nginx.conf into running Nginx container..."
             sudo docker cp /home/${{ secrets.USERNAME }}/nginx/conf.d/nginx.conf nginx:/etc/nginx/conf.d/default.conf
             echo "Checking Nginx configuration..."
-            if sudo docker exec nginx nginx -t; then
+            if sudo docker exec maru-egg-nginx nginx -t; then
               echo "Reloading Nginx..."
               sudo docker restart nginx
             else
