@@ -35,7 +35,7 @@ class AdminDepartmentControllerTest extends IntegrationTest {
 	private Department department;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	void setUp() {
 		college = College.builder()
 			.campus(CampusType.NATURAL)
 			.name("자연과학대학")
