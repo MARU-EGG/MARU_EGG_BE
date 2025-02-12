@@ -14,9 +14,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import mju.iphak.maru_egg.campus.api.dto.request.CreateCollegeRequest;
 import mju.iphak.maru_egg.campus.api.dto.request.UpdateCollegeRequest;
-import mju.iphak.maru_egg.campus.application.college.command.create.CreateCollegeService;
-import mju.iphak.maru_egg.campus.application.college.command.delete.DeleteCollegeService;
-import mju.iphak.maru_egg.campus.application.college.command.update.UpdateCollegeService;
 import mju.iphak.maru_egg.campus.domain.CampusType;
 import mju.iphak.maru_egg.campus.domain.College;
 import mju.iphak.maru_egg.campus.repository.CollegeRepository;
@@ -26,15 +23,6 @@ import mju.iphak.maru_egg.common.IntegrationTest;
 class AdminCollegeControllerTest extends IntegrationTest {
 
 	@Autowired
-	private CreateCollegeService createCollegeService;
-
-	@Autowired
-	private UpdateCollegeService updateCollegeService;
-
-	@Autowired
-	private DeleteCollegeService deleteCollegeService;
-
-	@Autowired
 	private CollegeRepository collegeRepository;
 
 	private College college;
@@ -42,21 +30,26 @@ class AdminCollegeControllerTest extends IntegrationTest {
 	@BeforeEach
 	void setUp() {
 		collegeRepository.deleteAll();
-		College college = College.builder().name("자연과학대학").campus(CampusType.NATURAL).build();
-		this.college = collegeRepository.save(college);
+		college = collegeRepository.save(
+			College.builder()
+				.campus(CampusType.NATURAL)
+				.name("자연과학대학")
+				.description("자연과학 관련 학과들")
+				.build()
+		);
 	}
 
 	@DisplayName("[성공] 대학 생성 요청")
 	@Test
 	void 대학_생성_성공() throws Exception {
 		// given
-		CreateCollegeRequest request = new CreateCollegeRequest("공과대학", null, CampusType.NATURAL.getType());
+		CreateCollegeRequest request = new CreateCollegeRequest("자연캠퍼스", "공과대학", "공학 관련 학과들");
 
 		// when
-		ResultActions result = PostCollege(request);
+		ResultActions result = postCollege(request);
 
 		// then
-		result.andExpect(status().isCreated());
+		result.andExpect(status().isOk());
 	}
 
 	@DisplayName("[성공] 대학 수정 요청")
@@ -64,10 +57,10 @@ class AdminCollegeControllerTest extends IntegrationTest {
 	void 대학_수정_성공() throws Exception {
 		// given
 		Long collegeId = college.getId();
-		UpdateCollegeRequest request = new UpdateCollegeRequest("변경된 대학명", null, null);
+		UpdateCollegeRequest request = new UpdateCollegeRequest("인문캠퍼스", null, "업데이트된 설명");
 
 		// when
-		ResultActions result = PutCollege(collegeId, request);
+		ResultActions result = putCollege(collegeId, request);
 
 		// then
 		result.andExpect(status().isOk());
@@ -80,28 +73,28 @@ class AdminCollegeControllerTest extends IntegrationTest {
 		Long collegeId = college.getId();
 
 		// when
-		ResultActions result = DeleteCollege(collegeId);
+		ResultActions result = deleteCollege(collegeId);
 
 		// then
-		result.andExpect(status().isNoContent());
+		result.andExpect(status().isOk());
 	}
 
-	private ResultActions PostCollege(CreateCollegeRequest request) throws Exception {
-		return mvc.perform(post("/api/admin/colleges")
+	private ResultActions postCollege(CreateCollegeRequest request) throws Exception {
+		return mvc.perform(post("/api/admin/campuses/colleges")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
 			.andDo(print());
 	}
 
-	private ResultActions PutCollege(Long id, UpdateCollegeRequest request) throws Exception {
-		return mvc.perform(put("/api/admin/colleges/{id}", id)
+	private ResultActions putCollege(Long id, UpdateCollegeRequest request) throws Exception {
+		return mvc.perform(put("/api/admin/campuses/colleges/{id}", id)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
 			.andDo(print());
 	}
 
-	private ResultActions DeleteCollege(Long id) throws Exception {
-		return mvc.perform(delete("/api/admin/colleges/{id}", id)
+	private ResultActions deleteCollege(Long id) throws Exception {
+		return mvc.perform(delete("/api/admin/campuses/colleges/{id}", id)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print());
 	}
