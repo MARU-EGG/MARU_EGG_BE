@@ -14,7 +14,7 @@ import mju.iphak.maru_egg.campus.application.department.query.FindAllByCollege;
 import mju.iphak.maru_egg.campus.application.department.query.FindAllDepartment;
 
 @RestController
-@RequestMapping("/api/departments")
+@RequestMapping("/api/campuses/departments")
 @RequiredArgsConstructor
 public class DepartmentController implements DepartmentControllerDocs {
 

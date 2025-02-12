@@ -17,7 +17,7 @@ import mju.iphak.maru_egg.campus.application.department.command.delete.DeleteDep
 import mju.iphak.maru_egg.campus.application.department.command.update.UpdateDepartment;
 
 @RestController
-@RequestMapping("/api/admin/departments")
+@RequestMapping("/api/admin/campuses/departments")
 @RequiredArgsConstructor
 public class AdminDepartmentController implements AdminDepartmentControllerDocs {
 

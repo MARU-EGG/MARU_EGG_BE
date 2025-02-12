@@ -17,7 +17,7 @@ import mju.iphak.maru_egg.campus.application.college.command.delete.DeleteColleg
 import mju.iphak.maru_egg.campus.application.college.command.update.UpdateCollege;
 
 @RestController
-@RequestMapping("/api/admin/colleges")
+@RequestMapping("/api/admin/campuses/colleges")
 @RequiredArgsConstructor
 public class AdminCollegeController implements AdminCollegeControllerDocs {
 

@@ -15,7 +15,7 @@ import mju.iphak.maru_egg.campus.application.college.query.find.FindAllCollege;
 import mju.iphak.maru_egg.campus.domain.CampusType;
 
 @RestController
-@RequestMapping("/api/colleges")
+@RequestMapping("/api/campuses/colleges")
 @RequiredArgsConstructor
 public class CollegeController implements CollegeControllerDocs {
 
