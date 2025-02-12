@@ -1,5 +1,6 @@
 package mju.iphak.maru_egg.campus.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -21,6 +22,7 @@ import mju.iphak.maru_egg.common.entity.BaseEntity;
 @Table(name = "department")
 public class Department extends BaseEntity {
 
+	@Column(nullable = false)
 	private String name;
 
 	private String description;

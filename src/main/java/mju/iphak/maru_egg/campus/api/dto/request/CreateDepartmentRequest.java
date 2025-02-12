@@ -1,6 +1,7 @@
 package mju.iphak.maru_egg.campus.api.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import mju.iphak.maru_egg.campus.domain.College;
 import mju.iphak.maru_egg.campus.domain.Department;
 
@@ -8,6 +9,7 @@ import mju.iphak.maru_egg.campus.domain.Department;
 public record CreateDepartmentRequest(
 
 	@Schema(example = "컴퓨터공학과")
+	@NotNull
 	String name,
 
 	@Schema(example = "컴퓨터공학과 설명")
