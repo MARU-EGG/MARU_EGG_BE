@@ -15,7 +15,7 @@ public interface AdminDepartmentControllerDocs {
 		summary = "학과 생성",
 		description = "새로운 학과를 생성합니다.",
 		responses = {
-			@ApiResponse(responseCode = "201", description = "학과 생성 성공")
+			@ApiResponse(responseCode = "200", description = "학과 생성 성공")
 		}
 	)
 	void createDepartment(CreateDepartmentRequest request);
@@ -33,7 +33,7 @@ public interface AdminDepartmentControllerDocs {
 		summary = "학과 삭제",
 		description = "기존 학과 정보를 삭제합니다.",
 		responses = {
-			@ApiResponse(responseCode = "204", description = "학과 삭제 성공")
+			@ApiResponse(responseCode = "200", description = "학과 삭제 성공")
 		}
 	)
 	void deleteDepartment(@PathVariable("departmentId") Long departmentId);

@@ -15,7 +15,7 @@ public interface AdminCollegeControllerDocs {
 		summary = "대학 생성",
 		description = "새로운 대학을 생성합니다.",
 		responses = {
-			@ApiResponse(responseCode = "201", description = "대학 생성 성공")
+			@ApiResponse(responseCode = "200", description = "대학 생성 성공")
 		}
 	)
 	void createCollege(CreateCollegeRequest request);
@@ -33,7 +33,7 @@ public interface AdminCollegeControllerDocs {
 		summary = "대학 삭제",
 		description = "기존 대학 정보를 삭제합니다.",
 		responses = {
-			@ApiResponse(responseCode = "204", description = "대학 삭제 성공")
+			@ApiResponse(responseCode = "200", description = "대학 삭제 성공")
 		}
 	)
 	void deleteCollege(@PathVariable("collegeId") Long collegeId);
