@@ -1,8 +1,9 @@
 package mju.iphak.maru_egg.question.application.find;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,8 @@ class FindAllQuestionsServiceTest extends MockTest {
 		AdmissionType type = AdmissionType.SUSI;
 		AdmissionCategory category = AdmissionCategory.ADMISSION_GUIDELINE;
 
-		when(questionRepository.findAllByAdmissionTypeAndAdmissionCategoryOrderByViewCountDesc(type, category))
+		when(questionRepository.findAllByAdmissionTypeAndAdmissionCategoryAndRenewalYearAfterOrderByViewCountDesc(type,
+			category, 2025))
 			.thenReturn(List.of(question));
 		when(findAnswerByQuestionId.invoke(question.getId())).thenReturn(answer);
 
@@ -82,7 +84,7 @@ class FindAllQuestionsServiceTest extends MockTest {
 		// given
 		AdmissionType type = AdmissionType.SUSI;
 
-		when(questionRepository.findAllByAdmissionTypeOrderByViewCountDesc(type))
+		when(questionRepository.findAllByAdmissionTypeAndRenewalYearOrderByViewCountDesc(type, 2025))
 			.thenReturn(List.of(question));
 		when(findAnswerByQuestionId.invoke(question.getId())).thenReturn(answer);
 

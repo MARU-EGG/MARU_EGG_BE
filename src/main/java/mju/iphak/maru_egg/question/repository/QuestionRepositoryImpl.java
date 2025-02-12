@@ -1,6 +1,7 @@
 package mju.iphak.maru_egg.question.repository;
 
-import static mju.iphak.maru_egg.question.domain.QQuestion.*;
+import static mju.iphak.maru_egg.common.constant.RenewalYearConst.RENEWAL_YEAR;
+import static mju.iphak.maru_egg.question.domain.QQuestion.question;
 
 import java.util.Collections;
 import java.util.List;
@@ -123,6 +124,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 		BooleanBuilder whereClause = new BooleanBuilder();
 		whereClause.and(booleanTemplate.gt(0));
 		whereClause.and(question.admissionType.eq(type));
+		whereClause.and(question.renewalYear.eq(RENEWAL_YEAR));
 
 		if (category != null) {
 			whereClause.and(question.admissionCategory.eq(category));
@@ -169,6 +171,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 		BooleanBuilder whereClause = new BooleanBuilder();
 		whereClause.and(question.isChecked.eq(true));
 		whereClause.and(booleanTemplate.gt(MIN_MATCHING_POINT));
+		whereClause.and(question.renewalYear.eq(RENEWAL_YEAR));
 		if (cursorPredicate != null) {
 			whereClause.and(cursorPredicate);
 		}

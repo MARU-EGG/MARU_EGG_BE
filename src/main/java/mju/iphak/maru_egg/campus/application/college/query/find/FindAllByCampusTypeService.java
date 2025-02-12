@@ -19,7 +19,7 @@ public class FindAllByCampusTypeService implements FindAllByCampusType {
 
 	public List<CollegeResponse> invoke(final String campusType) {
 		return collegeRepository.findAll().stream()
-			.filter(college -> college.getCampus().equals(CampusType.convertToCategory(campusType)))
+			.filter(college -> college.getCampus().equals(CampusType.convertToCampusType(campusType)))
 			.map(CollegeResponse::from)
 			.toList();
 	}

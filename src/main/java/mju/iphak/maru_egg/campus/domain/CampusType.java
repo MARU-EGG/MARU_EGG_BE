@@ -21,15 +21,14 @@ public enum CampusType {
 		return this.type;
 	}
 
-	public static CampusType convertToCategory(String category) {
-		if (category.equals(NATURAL.getType())) {
+	public static CampusType convertToCampusType(String type) {
+		if (type.equals(NATURAL.getType())) {
 			return NATURAL;
 		}
 
-		if (category.equals(HUMANITIES.getType())) {
+		if (type.equals(HUMANITIES.getType())) {
 			return HUMANITIES;
 		}
-
 		return null;
 	}
 }

@@ -1,6 +1,6 @@
 package mju.iphak.maru_egg.question.repository;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
@@ -101,10 +101,11 @@ class QuestionRepositoryTest extends RepositoryTest {
 	}
 
 	private List<Question> executeFindByTypeAndCategory(AdmissionType type, AdmissionCategory category) {
-		return questionRepository.findAllByAdmissionTypeAndAdmissionCategoryOrderByViewCountDesc(type, category);
+		return questionRepository.findAllByAdmissionTypeAndAdmissionCategoryAndRenewalYearAfterOrderByViewCountDesc(
+			type, category, 2025);
 	}
 
 	private List<Question> executeFindByTypeOnly(AdmissionType type) {
-		return questionRepository.findAllByAdmissionTypeOrderByViewCountDesc(type);
+		return questionRepository.findAllByAdmissionTypeAndRenewalYearOrderByViewCountDesc(type, 2025);
 	}
 }
