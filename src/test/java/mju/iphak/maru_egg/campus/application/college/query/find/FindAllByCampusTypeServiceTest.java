@@ -51,7 +51,7 @@ class FindAllByCampusTypeServiceTest extends MockTest {
 		when(collegeRepository.findAll()).thenReturn(List.of(naturalCollege, humanitiesCollege));
 
 		// when
-		List<CollegeResponse> result = findAllByCampusTypeService.invoke(CampusType.NATURAL);
+		List<CollegeResponse> result = findAllByCampusTypeService.invoke(CampusType.NATURAL.getType());
 
 		// then
 		assertThat(result).hasSize(1);

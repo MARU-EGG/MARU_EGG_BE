@@ -12,7 +12,6 @@ import mju.iphak.maru_egg.campus.api.dto.response.CollegeResponse;
 import mju.iphak.maru_egg.campus.api.swagger.CollegeControllerDocs;
 import mju.iphak.maru_egg.campus.application.college.query.find.FindAllByCampusType;
 import mju.iphak.maru_egg.campus.application.college.query.find.FindAllCollege;
-import mju.iphak.maru_egg.campus.domain.CampusType;
 
 @RestController
 @RequestMapping("/api/campuses/colleges")
@@ -28,7 +27,7 @@ public class CollegeController implements CollegeControllerDocs {
 	}
 
 	@GetMapping("/campus/{campusType}")
-	public List<CollegeResponse> getAllByCampusType(@PathVariable("campusType") CampusType campusType) {
+	public List<CollegeResponse> getAllByCampusType(@PathVariable("campusType") String campusType) {
 		return findAllByCampusType.invoke(campusType);
 	}
 }
