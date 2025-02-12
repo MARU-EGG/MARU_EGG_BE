@@ -8,12 +8,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import mju.iphak.maru_egg.campus.api.dto.request.CreateCollegeRequest;
 import mju.iphak.maru_egg.campus.api.dto.request.UpdateCollegeRequest;
 
-@Tag(name = "Admin College API", description = "관리자용 대학 관리 API 입니다.")
+@Tag(name = "Admin College API", description = "관리자용 단과대학 관리 API 입니다.")
 public interface AdminCollegeControllerDocs {
 
 	@Operation(
-		summary = "대학 생성",
-		description = "새로운 대학을 생성합니다.",
+		summary = "단과대학 생성",
+		description = "새로운 단과대학을 생성합니다.",
 		responses = {
 			@ApiResponse(responseCode = "200", description = "대학 생성 성공")
 		}

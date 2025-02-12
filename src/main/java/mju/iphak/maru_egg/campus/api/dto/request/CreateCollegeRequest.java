@@ -8,7 +8,7 @@ import mju.iphak.maru_egg.campus.domain.College;
 @Schema(description = "대학 생성 DTO")
 public record CreateCollegeRequest(
 
-	@Schema(example = "자연캠퍼스")
+	@Schema(example = "자연캠퍼스", description = "자연캠퍼스 / 인문캠퍼스 둘 중 하나")
 	@NotNull
 	String campus,
 
@@ -21,7 +21,7 @@ public record CreateCollegeRequest(
 ) {
 	public College toEntity() {
 		return College.builder()
-			.campus(CampusType.convertToCategory(this.campus))
+			.campus(CampusType.convertToCampusType(this.campus))
 			.name(this.name)
 			.description(this.description)
 			.build();

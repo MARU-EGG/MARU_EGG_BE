@@ -8,13 +8,18 @@ import mju.iphak.maru_egg.campus.domain.Department;
 @Schema(description = "학과 응답 DTO")
 public record DepartmentResponse(
 
-	Long id,
+	@Schema(example = "1")
+	Long departmentId,
+
+	@Schema(example = "경영학과")
 	String name,
+
+	@Schema(example = "1")
 	Long collegeId
 ) {
 	public static DepartmentResponse from(Department department) {
 		return DepartmentResponse.builder()
-			.id(department.getId())
+			.departmentId(department.getId())
 			.name(department.getName())
 			.collegeId(department.getCollege().getId())
 			.build();
