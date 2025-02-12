@@ -65,6 +65,8 @@ public class SecurityConfig {
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/"))
 					.permitAll()
+					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/campuses/**"))
+					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/auth/sign-up"))
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/auth/sign-in"))
