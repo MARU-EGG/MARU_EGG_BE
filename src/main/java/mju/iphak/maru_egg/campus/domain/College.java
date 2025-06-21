@@ -38,7 +38,7 @@ public class College extends BaseEntity {
 	private List<Department> departments;
 
 	public void update(UpdateCollegeRequest request) {
-		this.campus = request.campus() != null ? CampusType.convertToCategory(request.campus()) : this.campus;
+		this.campus = request.campus() != null ? CampusType.convertToCampusType(request.campus()) : this.campus;
 		this.name = request.name() != null ? request.name() : this.name;
 		this.description = request.description() != null ? request.description() : this.description;
 	}
