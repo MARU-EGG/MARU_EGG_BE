@@ -1,5 +1,7 @@
 package mju.iphak.maru_egg.question.domain;
 
+import static mju.iphak.maru_egg.common.constant.RenewalYearConst.RENEWAL_YEAR;
+
 import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Column;
@@ -43,6 +45,9 @@ public class Question extends BaseEntity {
 	@ColumnDefault("false")
 	private boolean isChecked;
 
+	@Column(name = "renewal_year", columnDefinition = "2024")
+	private int renewalYear;
+
 	@OneToOne(mappedBy = "question", orphanRemoval = true)
 	private Answer answer;
 
@@ -81,6 +86,7 @@ public class Question extends BaseEntity {
 			.admissionType(admissionType)
 			.admissionCategory(admissionCategory)
 			.isChecked(true)
+			.renewalYear(RENEWAL_YEAR)
 			.build();
 	}
 }

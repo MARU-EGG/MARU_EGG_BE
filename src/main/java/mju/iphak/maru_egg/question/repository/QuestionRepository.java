@@ -9,8 +9,8 @@ import mju.iphak.maru_egg.admission.domain.AdmissionType;
 import mju.iphak.maru_egg.question.domain.Question;
 
 public interface QuestionRepository extends JpaRepository<Question, Long>, QuestionRepositoryCustom {
-	List<Question> findAllByAdmissionTypeAndAdmissionCategoryOrderByViewCountDesc(AdmissionType type,
-		AdmissionCategory category);
+	List<Question> findAllByAdmissionTypeAndAdmissionCategoryAndRenewalYearAfterOrderByViewCountDesc(AdmissionType type,
+		AdmissionCategory category, int renewalYear);
 
-	List<Question> findAllByAdmissionTypeOrderByViewCountDesc(AdmissionType type);
+	List<Question> findAllByAdmissionTypeAndRenewalYearOrderByViewCountDesc(AdmissionType type, int renewalYear);
 }

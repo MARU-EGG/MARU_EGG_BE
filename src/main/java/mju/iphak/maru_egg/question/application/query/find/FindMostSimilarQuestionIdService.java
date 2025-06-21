@@ -1,13 +1,12 @@
 package mju.iphak.maru_egg.question.application.query.find;
 
-import static mju.iphak.maru_egg.common.exception.ErrorCode.*;
+import static mju.iphak.maru_egg.common.exception.ErrorCode.INTERNAL_ERROR_TEXT_SIMILARITY;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import mju.iphak.maru_egg.common.utils.NLP.TextSimilarityUtils;
@@ -15,7 +14,6 @@ import mju.iphak.maru_egg.question.api.dto.response.SimilarityResult;
 import mju.iphak.maru_egg.question.repository.dto.response.QuestionCoreResponse;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FindMostSimilarQuestionIdService implements FindMostSimilarQuestionId {
 
