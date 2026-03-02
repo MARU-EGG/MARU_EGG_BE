@@ -3,10 +3,10 @@ package mju.iphak.maru_egg.question.application.query.process;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mju.iphak.maru_egg.answer.application.command.process.ProcessAnswer;
 import mju.iphak.maru_egg.common.utils.PhraseExtractionUtils;
@@ -19,24 +19,40 @@ import mju.iphak.maru_egg.question.repository.dto.request.QuestionCoreRequest;
 import mju.iphak.maru_egg.question.repository.dto.response.QuestionCoreResponse;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
-@Transactional
 public class ProcessQuestionService implements ProcessQuestion {
 
 	private final QuestionRepository questionRepository;
 	private final ProcessAnswer processAnswer;
 	private final FindQuestion findQuestion;
 	private final FindMostSimilarQuestionId findMostSimilarQuestionId;
+	private final TransactionTemplate readTransactionTemplate;
+
+	public ProcessQuestionService(
+		QuestionRepository questionRepository,
+		ProcessAnswer processAnswer,
+		FindQuestion findQuestion,
+		FindMostSimilarQuestionId findMostSimilarQuestionId,
+		@Qualifier("readTransactionTemplate") TransactionTemplate readTransactionTemplate
+	) {
+		this.questionRepository = questionRepository;
+		this.processAnswer = processAnswer;
+		this.findQuestion = findQuestion;
+		this.findMostSimilarQuestionId = findMostSimilarQuestionId;
+		this.readTransactionTemplate = readTransactionTemplate;
+	}
 
 	public QuestionResponse invoke(final QuestionRequest request) {
 		String contentToken = PhraseExtractionUtils.extractPhrases(request.content());
 
 		QuestionCoreRequest questionCoreRequest = QuestionCoreRequest.of(request, contentToken);
 
-		List<QuestionCoreResponse> questionCoreResponses = questionRepository.searchQuestions(
-				questionCoreRequest)
-			.orElse(Collections.emptyList());
+		List<QuestionCoreResponse> questionCoreResponses = readTransactionTemplate.execute(status ->
+			questionRepository.searchQuestions(questionCoreRequest).orElse(Collections.emptyList())
+		);
+		if (questionCoreResponses == null) {
+			questionCoreResponses = Collections.emptyList();
+		}
 		if (questionCoreResponses.isEmpty()) {
 			return processAnswer.invoke(request, contentToken);
 		}
