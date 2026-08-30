@@ -56,6 +56,14 @@ test('신규 질문은 실행, VU, 반복 식별자를 포함하고 seed와 겹�
   assert.ok(!EXISTING_QUESTIONS.some(question => question.content === selected.request.content));
 });
 
+test('신규 질문은 실행 중 저장된 다른 질문과 유사도 재사용되지 않도록 고유 숫자 토큰을 가진다', () => {
+  const selected = selectWorkload({ runId: 'run-42', vu: 17, iteration: 9 });
+  const numberTokens = selected.request.content.match(/\d+/g) ?? [];
+
+  assert.ok(numberTokens.length >= 10);
+  assert.equal(new Set(numberTokens).size, numberTokens.length);
+});
+
 test('기존 경로는 고정 seed 질문만 순환한다', () => {
   for (let iteration = 0; iteration < 6; iteration += 1) {
     const selected = selectWorkload({ runId: 'test', vu: 1, iteration });
