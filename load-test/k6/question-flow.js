@@ -3,6 +3,7 @@ import { check } from 'k6';
 import execution from 'k6/execution';
 import { Counter, Trend } from 'k6/metrics';
 
+import { scenarioFor } from './lib/profiles.mjs';
 import { selectWorkload } from './lib/workload.mjs';
 
 const selectedExisting = new Counter('selected_existing');
@@ -14,41 +15,16 @@ const failedNew = new Counter('failed_new');
 const existingDuration = new Trend('existing_duration', true);
 const newDuration = new Trend('new_duration', true);
 
-const smokeStages = [
-  { duration: '10s', target: 10 },
-  { duration: '30s', target: 10 },
-  { duration: '5s', target: 0 },
-];
-
-const comparisonStages = [
-  { duration: '10s', target: 100 },
-  { duration: '90s', target: 100 },
-  { duration: '10s', target: 0 },
-];
-
-const fullStages = [
-  { duration: '30s', target: 100 },
-  { duration: '60s', target: 500 },
-  { duration: '60s', target: 1_000 },
-  { duration: '60s', target: 2_000 },
-  { duration: '120s', target: 3_000 },
-  { duration: '30s', target: 0 },
-];
-
 export const options = {
   scenarios: {
-    mixed_questions: {
-      executor: 'ramping-vus',
-      startVUs: 0,
-      stages: __ENV.SMOKE === 'true'
-        ? smokeStages
-        : (__ENV.LOAD_PROFILE === 'comparison' ? comparisonStages : fullStages),
-      gracefulRampDown: '30s',
-      gracefulStop: '30s',
-    },
+    mixed_questions: scenarioFor({
+      smoke: __ENV.SMOKE === 'true',
+      loadProfile: __ENV.LOAD_PROFILE || 'full',
+    }),
   },
   thresholds: {
     http_req_failed: ['rate<0.05'],
+    dropped_iterations: ['count==0'],
   },
   discardResponseBodies: false,
 };

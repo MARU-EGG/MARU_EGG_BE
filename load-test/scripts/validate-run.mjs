@@ -6,7 +6,7 @@ function count(metrics, name) {
   return metrics?.[name]?.values?.count ?? 0;
 }
 
-export function validateRun({ k6, metrics, existingVerification }) {
+export function validateRun({ k6, metrics, existingVerification, loadProfile = 'full' }) {
   const errors = [];
   const k6Metrics = k6?.metrics ?? {};
   const selectedExisting = count(k6Metrics, 'selected_existing');
@@ -16,10 +16,17 @@ export function validateRun({ k6, metrics, existingVerification }) {
   const successfulNew = count(k6Metrics, 'successful_new');
   const failedExisting = count(k6Metrics, 'failed_existing');
   const failedNew = count(k6Metrics, 'failed_new');
+  const droppedIterations = count(k6Metrics, 'dropped_iterations');
   const existingRatio = selectedTotal === 0 ? 0 : selectedExisting / selectedTotal;
   const mock = metrics?.mock ?? {};
 
   if (selectedTotal === 0) errors.push('k6 selected no requests');
+  if (loadProfile === 'minute-3000' && selectedTotal !== 3_000) {
+    errors.push(`minute-3000 selected request count mismatch: ${selectedTotal} != 3000`);
+  }
+  if (loadProfile === 'minute-3000' && droppedIterations !== 0) {
+    errors.push(`minute-3000 dropped iterations exist: ${droppedIterations}`);
+  }
   if (existingRatio < 0.58 || existingRatio > 0.62) {
     errors.push(`existing request ratio out of range: ${existingRatio}`);
   }
@@ -50,6 +57,16 @@ function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
 
+function readEnvironment(file) {
+  return Object.fromEntries(fs.readFileSync(file, 'utf8')
+    .split('\n')
+    .filter(line => line.includes('='))
+    .map(line => {
+      const separator = line.indexOf('=');
+      return [line.slice(0, separator), line.slice(separator + 1)];
+    }));
+}
+
 const isCli = process.argv[1]
   && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -59,10 +76,12 @@ if (isCli) {
     console.error('usage: node validate-run.mjs RESULT_DIRECTORY');
     process.exit(2);
   }
+  const environment = readEnvironment(path.join(resultDirectory, 'environment.txt'));
   const errors = validateRun({
     k6: readJson(path.join(resultDirectory, 'k6-summary.json')),
     metrics: readJson(path.join(resultDirectory, 'metrics-summary.json')),
     existingVerification: readJson(path.join(resultDirectory, 'existing-path-verification.json')),
+    loadProfile: environment.load_profile,
   });
   if (errors.length > 0) {
     console.error(errors.join('\n'));
