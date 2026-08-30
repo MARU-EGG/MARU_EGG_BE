@@ -208,4 +208,3 @@ Reset the database and mock counters between runs. Store raw k6 summaries, sampl
 - metric sampler for Actuator and MySQL
 - baseline and refactored raw result directories
 - final Markdown report with comparison tables and conclusions
-
