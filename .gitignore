@@ -39,3 +39,7 @@ out/
 
 !/docker/db/
 !/db/
+
+logs/
+load-test/results/
+load-test/.runtime/

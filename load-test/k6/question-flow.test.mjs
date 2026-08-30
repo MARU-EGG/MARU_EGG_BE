@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+
+import { EXISTING_QUESTIONS, selectWorkload } from './lib/workload.mjs';
+
+test('10,000개 선택은 정확히 기존 60%, 신규 40%다', () => {
+  const counts = { existing: 0, new: 0 };
+  for (let iteration = 0; iteration < 10_000; iteration += 1) {
+    counts[selectWorkload({ runId: 'test', vu: 1, iteration }).kind] += 1;
+  }
+  assert.deepEqual(counts, { existing: 6_000, new: 4_000 });
+});
+
+test('신규 질문은 실행, VU, 반복 식별자를 포함하고 seed와 겹치지 않는다', () => {
+  const selected = selectWorkload({ runId: 'run-42', vu: 17, iteration: 9 });
+
+  assert.equal(selected.kind, 'new');
+  assert.match(selected.request.content, /run-42/);
+  assert.match(selected.request.content, /vu-17/);
+  assert.match(selected.request.content, /iter-9/);
+  assert.ok(!EXISTING_QUESTIONS.some(question => question.content === selected.request.content));
+});
+
+test('기존 경로는 고정 seed 질문만 순환한다', () => {
+  for (let iteration = 0; iteration < 6; iteration += 1) {
+    const selected = selectWorkload({ runId: 'test', vu: 1, iteration });
+    assert.equal(selected.kind, 'existing');
+    assert.deepEqual(selected.request, EXISTING_QUESTIONS[iteration]);
+  }
+});

@@ -1,0 +1,9 @@
+{
+  "name": "maru-egg-load-test-rag-mock",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test server.test.mjs",
+    "start": "node server.mjs"
+  }
+}

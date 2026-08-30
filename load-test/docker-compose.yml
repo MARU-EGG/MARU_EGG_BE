@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: maru-egg-load-test-mysql
+    command:
+      - --innodb-ft-min-token-size=1
+      - --max-connections=500
+      - --performance-schema=ON
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: maru_egg_load_test
+      MYSQL_USER: loadtest
+      MYSQL_PASSWORD: loadtest
+      TZ: Asia/Seoul
+    ports:
+      - "${LOAD_TEST_MYSQL_PORT:-3307}:3306"
+    volumes:
+      - maru-egg-load-test-mysql-data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uloadtest", "-ploadtest"]
+      interval: 2s
+      timeout: 2s
+      retries: 60
+
+volumes:
+  maru-egg-load-test-mysql-data:
