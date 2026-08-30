@@ -46,3 +46,23 @@ test('없는 선택 지표는 0이 아니라 not exported로 보존한다', () =
 
   assert.equal(summary.hikari.connectionTimeoutDelta, 'not exported');
 });
+
+test('JVM CPU, 메모리, 스레드 peak와 GC delta를 요약한다', () => {
+  const summary = summarizeSamples([
+    {
+      timestamp: '2026-01-01T00:00:00Z',
+      app: { jvm: { processCpuUsage: 0.1, systemCpuUsage: 0.2, memoryUsedBytes: 100, liveThreads: 10, gcPauseCount: 3, gcPauseSumSeconds: 0.2 } },
+    },
+    {
+      timestamp: '2026-01-01T00:00:01Z',
+      app: { jvm: { processCpuUsage: 0.7, systemCpuUsage: 0.8, memoryUsedBytes: 500, liveThreads: 30, gcPauseCount: 8, gcPauseSumSeconds: 0.9 } },
+    },
+  ]);
+
+  assert.equal(summary.jvm.peakProcessCpuUsage.value, 0.7);
+  assert.equal(summary.jvm.peakSystemCpuUsage.value, 0.8);
+  assert.equal(summary.jvm.peakMemoryUsedBytes.value, 500);
+  assert.equal(summary.jvm.peakLiveThreads.value, 30);
+  assert.equal(summary.jvm.gcPauseCountDelta, 5);
+  assert.ok(Math.abs(summary.jvm.gcPauseSecondsDelta - 0.7) < 1e-9);
+});

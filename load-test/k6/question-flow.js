@@ -20,6 +20,12 @@ const smokeStages = [
   { duration: '5s', target: 0 },
 ];
 
+const comparisonStages = [
+  { duration: '10s', target: 100 },
+  { duration: '90s', target: 100 },
+  { duration: '10s', target: 0 },
+];
+
 const fullStages = [
   { duration: '30s', target: 100 },
   { duration: '60s', target: 500 },
@@ -34,7 +40,9 @@ export const options = {
     mixed_questions: {
       executor: 'ramping-vus',
       startVUs: 0,
-      stages: __ENV.SMOKE === 'true' ? smokeStages : fullStages,
+      stages: __ENV.SMOKE === 'true'
+        ? smokeStages
+        : (__ENV.LOAD_PROFILE === 'comparison' ? comparisonStages : fullStages),
       gracefulRampDown: '30s',
       gracefulStop: '30s',
     },

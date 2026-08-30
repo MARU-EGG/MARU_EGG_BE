@@ -80,7 +80,7 @@ collector_pid=$!
 {
   echo "run_id=$run_id"
   echo "variant=${VARIANT:-refactored}"
-  echo "commit=$(git -C "$repo_root" rev-parse HEAD)"
+  echo "commit=${APP_COMMIT:-$(git -C "$repo_root" rev-parse HEAD)}"
   echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   echo "java=$(java -version 2>&1 | head -n 1)"
   echo "k6=$(k6 version | head -n 1)"
@@ -88,10 +88,11 @@ collector_pid=$!
   echo "hikari_max=${LOAD_TEST_HIKARI_MAX_POOL_SIZE:-20}"
   echo "tomcat_max=${LOAD_TEST_TOMCAT_MAX_THREADS:-200}"
   echo "smoke=${SMOKE:-false}"
+  echo "load_profile=${LOAD_PROFILE:-full}"
 } >"$result_directory/environment.txt"
 
 set +e
-BASE_URL="$app_base_url" RUN_ID="$run_id" RESULT_DIR="$result_directory" SMOKE="${SMOKE:-false}" \
+BASE_URL="$app_base_url" RUN_ID="$run_id" RESULT_DIR="$result_directory" SMOKE="${SMOKE:-false}" LOAD_PROFILE="${LOAD_PROFILE:-full}" \
   k6 run "$repo_root/load-test/k6/question-flow.js" \
   >"$result_directory/k6.log" 2>&1
 k6_status=$?

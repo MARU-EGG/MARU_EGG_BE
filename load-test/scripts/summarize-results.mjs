@@ -42,6 +42,14 @@ export function summarizeSamples(samples) {
       peakBusy: peak(samples, sample => sample.app?.tomcat?.busy),
       configuredMax: samples.find(sample => sample.app?.tomcat?.max != null)?.app.tomcat.max ?? NOT_EXPORTED,
     },
+    jvm: {
+      peakProcessCpuUsage: peak(samples, sample => sample.app?.jvm?.processCpuUsage),
+      peakSystemCpuUsage: peak(samples, sample => sample.app?.jvm?.systemCpuUsage),
+      peakMemoryUsedBytes: peak(samples, sample => sample.app?.jvm?.memoryUsedBytes),
+      peakLiveThreads: peak(samples, sample => sample.app?.jvm?.liveThreads),
+      gcPauseCountDelta: counterDelta(samples, sample => sample.app?.jvm?.gcPauseCount),
+      gcPauseSecondsDelta: counterDelta(samples, sample => sample.app?.jvm?.gcPauseSumSeconds),
+    },
     mysql: {
       peakThreadsConnected: peak(samples, sample => sample.mysql?.threadsConnected),
       peakThreadsRunning: peak(samples, sample => sample.mysql?.threadsRunning),
