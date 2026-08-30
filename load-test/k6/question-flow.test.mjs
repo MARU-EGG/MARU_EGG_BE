@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { scenarioFor } from './lib/profiles.mjs';
+import { scenarioFor, staggerDelaySeconds } from './lib/profiles.mjs';
 import { EXISTING_QUESTIONS, selectWorkload } from './lib/workload.mjs';
 
 test('1분 3,000건 프로필은 초당 50건을 60초 동안 예약한다', () => {
@@ -20,6 +20,22 @@ test('기존 smoke, comparison, full 프로필의 단계를 보존한다', () =>
   assert.equal(scenarioFor({ smoke: true, loadProfile: 'full' }).stages.at(-2).target, 10);
   assert.equal(scenarioFor({ smoke: false, loadProfile: 'comparison' }).stages.at(-2).target, 100);
   assert.equal(scenarioFor({ smoke: false, loadProfile: 'full' }).stages.at(-2).target, 3_000);
+});
+
+test('3,000 VU 프로필은 각 VU가 한 번씩 180초 안에 실행된다', () => {
+  assert.deepEqual(scenarioFor({ smoke: false, loadProfile: 'vu-3000-minute' }), {
+    executor: 'per-vu-iterations',
+    vus: 3_000,
+    iterations: 1,
+    maxDuration: '180s',
+    gracefulStop: '30s',
+  });
+});
+
+test('3,000 VU 요청 시작은 60초 동안 균등 분산된다', () => {
+  assert.equal(staggerDelaySeconds(1, 3_000, 60), 0);
+  assert.equal(staggerDelaySeconds(1_501, 3_000, 60), 30);
+  assert.equal(staggerDelaySeconds(3_000, 3_000, 60), 59.98);
 });
 
 test('10,000개 선택은 정확히 기존 60%, 신규 40%다', () => {

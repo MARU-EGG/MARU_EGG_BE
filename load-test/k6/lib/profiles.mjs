@@ -20,6 +20,16 @@ const fullStages = Object.freeze([
 ]);
 
 export function scenarioFor({ smoke, loadProfile }) {
+  if (loadProfile === 'vu-3000-minute') {
+    return {
+      executor: 'per-vu-iterations',
+      vus: 3_000,
+      iterations: 1,
+      maxDuration: '180s',
+      gracefulStop: '30s',
+    };
+  }
+
   if (loadProfile === 'minute-3000') {
     return {
       executor: 'constant-arrival-rate',
@@ -43,4 +53,8 @@ export function scenarioFor({ smoke, loadProfile }) {
     gracefulRampDown: '30s',
     gracefulStop: '30s',
   };
+}
+
+export function staggerDelaySeconds(vuId, totalVUs, windowSeconds) {
+  return ((vuId - 1) * windowSeconds) / totalVUs;
 }

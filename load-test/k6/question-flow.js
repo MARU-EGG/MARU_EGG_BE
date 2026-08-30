@@ -1,9 +1,10 @@
 import http from 'k6/http';
 import { check } from 'k6';
+import { sleep } from 'k6';
 import execution from 'k6/execution';
 import { Counter, Trend } from 'k6/metrics';
 
-import { scenarioFor } from './lib/profiles.mjs';
+import { scenarioFor, staggerDelaySeconds } from './lib/profiles.mjs';
 import { selectWorkload } from './lib/workload.mjs';
 
 const selectedExisting = new Counter('selected_existing');
@@ -30,6 +31,10 @@ export const options = {
 };
 
 export default function () {
+  if (__ENV.LOAD_PROFILE === 'vu-3000-minute') {
+    sleep(staggerDelaySeconds(execution.vu.idInTest, 3_000, 60));
+  }
+
   const runId = __ENV.RUN_ID || 'manual';
   const selection = selectWorkload({
     runId,

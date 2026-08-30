@@ -119,3 +119,68 @@ test('1분 3,000건 프로필의 요청 누락과 dropped iteration을 실패시
   assert.ok(errors.includes('minute-3000 selected request count mismatch: 2999 != 3000'));
   assert.ok(errors.includes('minute-3000 dropped iterations exist: 1'));
 });
+
+test('3,000 VU 프로필은 전체 성공과 커넥션 오류 0건을 검증한다', () => {
+  const errors = validateRun({
+    loadProfile: 'vu-3000-minute',
+    k6: {
+      metrics: {
+        selected_existing: metric(1_800),
+        selected_new: metric(1_200),
+        successful_existing: metric(1_800),
+        successful_new: metric(1_200),
+        failed_existing: metric(0),
+        failed_new: metric(0),
+        dropped_iterations: metric(0),
+      },
+    },
+    metrics: {
+      hikari: { connectionTimeoutDelta: 0 },
+      mysql: { connectionErrorsMaxConnectionsDelta: 0 },
+      mock: {
+        finalTotal: 1_200,
+        finalCompleted: 1_200,
+        finalErrors: 0,
+        minDelayMs: 5000,
+        maxDelayMs: 10000,
+      },
+    },
+    existingVerification: { total: 0 },
+  });
+
+  assert.deepEqual(errors, []);
+});
+
+test('3,000 VU 프로필의 요청 누락과 Hikari, MySQL 연결 오류를 실패시킨다', () => {
+  const errors = validateRun({
+    loadProfile: 'vu-3000-minute',
+    k6: {
+      metrics: {
+        selected_existing: metric(1_799),
+        selected_new: metric(1_200),
+        successful_existing: metric(1_799),
+        successful_new: metric(1_199),
+        failed_existing: metric(0),
+        failed_new: metric(1),
+        dropped_iterations: metric(1),
+      },
+    },
+    metrics: {
+      hikari: { connectionTimeoutDelta: 1 },
+      mysql: { connectionErrorsMaxConnectionsDelta: 1 },
+      mock: {
+        finalTotal: 1_200,
+        finalCompleted: 1_200,
+        finalErrors: 0,
+        minDelayMs: 5000,
+        maxDelayMs: 10000,
+      },
+    },
+    existingVerification: { total: 0 },
+  });
+
+  assert.ok(errors.includes('vu-3000-minute selected request count mismatch: 2999 != 3000'));
+  assert.ok(errors.includes('vu-3000-minute dropped iterations exist: 1'));
+  assert.ok(errors.includes('vu-3000-minute Hikari connection timeouts exist: 1'));
+  assert.ok(errors.includes('vu-3000-minute MySQL max-connection errors exist: 1'));
+});

@@ -27,6 +27,23 @@ export function validateRun({ k6, metrics, existingVerification, loadProfile = '
   if (loadProfile === 'minute-3000' && droppedIterations !== 0) {
     errors.push(`minute-3000 dropped iterations exist: ${droppedIterations}`);
   }
+  if (loadProfile === 'vu-3000-minute' && selectedTotal !== 3_000) {
+    errors.push(`vu-3000-minute selected request count mismatch: ${selectedTotal} != 3000`);
+  }
+  if (loadProfile === 'vu-3000-minute' && droppedIterations !== 0) {
+    errors.push(`vu-3000-minute dropped iterations exist: ${droppedIterations}`);
+  }
+  if (loadProfile === 'vu-3000-minute' && metrics?.hikari?.connectionTimeoutDelta !== 0) {
+    errors.push(
+      `vu-3000-minute Hikari connection timeouts exist: ${metrics?.hikari?.connectionTimeoutDelta}`,
+    );
+  }
+  if (loadProfile === 'vu-3000-minute' && metrics?.mysql?.connectionErrorsMaxConnectionsDelta !== 0) {
+    errors.push(
+      'vu-3000-minute MySQL max-connection errors exist: '
+        + metrics?.mysql?.connectionErrorsMaxConnectionsDelta,
+    );
+  }
   if (existingRatio < 0.58 || existingRatio > 0.62) {
     errors.push(`existing request ratio out of range: ${existingRatio}`);
   }
