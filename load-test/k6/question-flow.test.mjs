@@ -46,22 +46,24 @@ test('10,000개 선택은 정확히 기존 60%, 신규 40%다', () => {
   assert.deepEqual(counts, { existing: 6_000, new: 4_000 });
 });
 
-test('신규 질문은 실행, VU, 반복 식별자를 포함하고 seed와 겹치지 않는다', () => {
+test('신규 질문은 검색 후보가 없는 단일 고유 숫자 payload다', () => {
   const selected = selectWorkload({ runId: 'run-42', vu: 17, iteration: 9 });
 
   assert.equal(selected.kind, 'new');
-  assert.match(selected.request.content, /run-42/);
-  assert.match(selected.request.content, /vu-17/);
-  assert.match(selected.request.content, /iter-9/);
+  assert.match(selected.request.content, /^\d+$/);
   assert.ok(!EXISTING_QUESTIONS.some(question => question.content === selected.request.content));
 });
 
-test('신규 질문은 실행 중 저장된 다른 질문과 유사도 재사용되지 않도록 고유 숫자 토큰을 가진다', () => {
-  const selected = selectWorkload({ runId: 'run-42', vu: 17, iteration: 9 });
-  const numberTokens = selected.request.content.match(/\d+/g) ?? [];
+test('1,200개 신규 질문 payload는 실행 안에서 모두 다르다', () => {
+  const contents = new Set();
+  for (let vu = 1; vu <= 3_000; vu += 1) {
+    if ((vu - 1) % 10 < 6) {
+      continue;
+    }
+    contents.add(selectWorkload({ runId: 'run-42', vu, iteration: vu - 1 }).request.content);
+  }
 
-  assert.ok(numberTokens.length >= 10);
-  assert.equal(new Set(numberTokens).size, numberTokens.length);
+  assert.equal(contents.size, 1_200);
 });
 
 test('기존 경로는 고정 seed 질문만 순환한다', () => {

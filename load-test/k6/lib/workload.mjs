@@ -15,18 +15,14 @@ export function selectWorkload({ runId, vu, iteration }) {
       request: EXISTING_QUESTIONS[cycleIndex],
     };
   }
-  const uniqueBase = 10_000_000 + (vu * 1_000_003) + (iteration * 97);
-  const uniqueTerms = Array.from(
-    { length: 8 },
-    (_, offset) => uniqueBase + (offset * 99_991),
-  ).join(' ');
+  const uniqueQuestionId = 1_000_000_000_000 + (vu * 1_000_003) + (iteration * 97);
 
   return {
     kind: 'new',
     request: {
       type: 'SUSI',
       category: 'ADMISSION_GUIDELINE',
-      content: `부하테스트 신규 질문 ${runId} vu-${vu} iter-${iteration} 고유번호 ${uniqueTerms}`,
+      content: String(uniqueQuestionId),
     },
   };
 }
