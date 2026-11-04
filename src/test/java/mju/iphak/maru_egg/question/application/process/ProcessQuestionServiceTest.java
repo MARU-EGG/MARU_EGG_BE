@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import mju.iphak.maru_egg.admission.domain.AdmissionCategory;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
@@ -45,6 +48,9 @@ class ProcessQuestionServiceTest extends MockTest {
 	@Mock
 	private FindMostSimilarQuestionId findMostSimilarQuestionId;
 
+	@Mock
+	private TransactionTemplate readTransactionTemplate;
+
 	@InjectMocks
 	private ProcessQuestionService processQuestionService;
 
@@ -55,6 +61,10 @@ class ProcessQuestionServiceTest extends MockTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
+		when(readTransactionTemplate.execute(any(TransactionCallback.class))).thenAnswer(invocation -> {
+			TransactionCallback<?> callback = invocation.getArgument(0);
+			return callback.doInTransaction(mock(TransactionStatus.class));
+		});
 		question = Question.of("테스트 질문입니다.", "테스트 질문", AdmissionType.JEONGSI,
 			AdmissionCategory.ADMISSION_GUIDELINE);
 		answer = Answer.of(question, "기존 답변 내용");

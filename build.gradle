@@ -8,6 +8,8 @@ plugins {
 group = 'mju.iphak'
 version = '0.0.1-SNAPSHOT'
 
+ext['testcontainers.version'] = '1.21.3'
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -27,6 +29,8 @@ repositories {
 test {
     finalizedBy jacocoTestReport
     useJUnitPlatform()
+    // Docker Engine 29 rejects the 1.32 default used by docker-java 3.x.
+    systemProperty 'api.version', System.getProperty('api.version', '1.40')
 }
 
 jacoco {
@@ -119,7 +123,7 @@ dependencies {
 
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:mysql'
-    testImplementation 'org.testcontainers:jdbc:1.19.7'
+    testImplementation 'org.testcontainers:jdbc'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation "org.springframework.security:spring-security-test"
 

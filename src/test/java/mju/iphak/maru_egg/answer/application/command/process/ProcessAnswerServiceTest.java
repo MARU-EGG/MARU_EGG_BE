@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import mju.iphak.maru_egg.admission.domain.AdmissionCategory;
 import mju.iphak.maru_egg.admission.domain.AdmissionType;
@@ -32,12 +34,20 @@ class ProcessAnswerServiceTest extends MockTest {
 	@Mock
 	private CreateRAGAnswer createRAGAnswer;
 
+	@Mock
+	private TransactionTemplate writeTransactionTemplate;
+
 	@InjectMocks
 	private ProcessAnswerService processAnswerService;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
+		doAnswer(invocation -> {
+			java.util.function.Consumer<TransactionStatus> callback = invocation.getArgument(0);
+			callback.accept(mock(TransactionStatus.class));
+			return null;
+		}).when(writeTransactionTemplate).executeWithoutResult(any());
 	}
 
 	@DisplayName("[성공] RAG 서버에서 유효한 답변을 받아 질문과 답변 저장 요청")

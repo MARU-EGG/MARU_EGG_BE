@@ -45,7 +45,7 @@ public class Question extends BaseEntity {
 	@ColumnDefault("false")
 	private boolean isChecked;
 
-	@Column(name = "renewal_year", columnDefinition = "2024")
+	@Column(name = "renewal_year", nullable = false)
 	private int renewalYear;
 
 	@OneToOne(mappedBy = "question", orphanRemoval = true)

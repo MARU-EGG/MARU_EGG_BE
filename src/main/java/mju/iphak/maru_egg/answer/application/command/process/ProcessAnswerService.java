@@ -5,10 +5,10 @@ import static mju.iphak.maru_egg.answer.utils.AnswerGuideUtils.*;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mju.iphak.maru_egg.answer.application.command.create.CreateRAGAnswer;
 import mju.iphak.maru_egg.answer.application.query.rag.RagAnswer;
@@ -20,12 +20,21 @@ import mju.iphak.maru_egg.question.api.dto.response.QuestionResponse;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class ProcessAnswerService implements ProcessAnswer {
 
 	private final RagAnswer ragAnswer;
 	private final CreateRAGAnswer createRAGAnswer;
+	private final TransactionTemplate writeTransactionTemplate;
+
+	public ProcessAnswerService(
+		RagAnswer ragAnswer,
+		CreateRAGAnswer createRAGAnswer,
+		@Qualifier("writeTransactionTemplate") TransactionTemplate writeTransactionTemplate
+	) {
+		this.ragAnswer = ragAnswer;
+		this.createRAGAnswer = createRAGAnswer;
+		this.writeTransactionTemplate = writeTransactionTemplate;
+	}
 
 	public QuestionResponse invoke(QuestionRequest request, String contentToken) {
 		LLMAskQuestionRequest askQuestionRequest = getLlmAskQuestionRequest(request);
@@ -41,7 +50,7 @@ public class ProcessAnswerService implements ProcessAnswer {
 		}
 		SaveRAGAnswerRequest saveRAGAnswerRequest = SaveRAGAnswerRequest.of(request, contentToken, llmAnswerResponse);
 
-		createRAGAnswer.invoke(saveRAGAnswerRequest);
+		writeTransactionTemplate.executeWithoutResult(status -> createRAGAnswer.invoke(saveRAGAnswerRequest));
 		log.info("[NEW ANSWER] 답변: \"{}\"", llmAnswerResponse.answer());
 		log.info("[NEW QUESTION] 전형 타입: \"{}\", 전형: \"{}\" 질문: \"{}\"",
 			llmAnswerResponse.questionType(),

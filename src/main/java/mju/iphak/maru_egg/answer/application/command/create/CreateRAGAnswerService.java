@@ -1,7 +1,6 @@
 package mju.iphak.maru_egg.answer.application.command.create;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ import mju.iphak.maru_egg.question.repository.QuestionRepository;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional
 public class CreateRAGAnswerService implements CreateRAGAnswer {
 
 	private final AnswerRepository answerRepository;
